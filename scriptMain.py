@@ -30,5 +30,6 @@ rcssSkillRecognition(skills=skills)
 #     return print(resume_Json)
 
 
+#
 # Fonction qui permet de faire la connection à la base de données NoSql (MongoDB?):
 # Récupérer le JSON du CV "getJsonOfResume()"" au moment de l'enregistrement dans la collection de CV
