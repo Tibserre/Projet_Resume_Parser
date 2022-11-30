@@ -523,12 +523,12 @@ class resumeparse(object):
             # read all content of a file
             list_competences = file.readlines()
 
-        result = ""
+        result = []
         for word in list_competences:
             wLower = word.strip().lower()
             if text.find(wLower) != -1:
                 #print(word)
-                result += word
+                result.append(word.rstrip('\n')) #ajoute le resultat a la liste et enleve le \n
 
         return result
 
@@ -574,7 +574,7 @@ class resumeparse(object):
         text = list(dict.fromkeys(text))
         return text
 
-    def search_CV_skills_in_linkedin_skills(file_path, skills):
+    '''def search_CV_skills_in_linkedin_skills(file_path, skills):
         with open(file_path, 'r', encoding="utf-8") as file:
             # read all content of a file
             list_competences = file.readlines()
@@ -593,7 +593,7 @@ class resumeparse(object):
                               skill.lower()) >= 0.9):  # Seuil de précision subjectif qui peut etre ajuster pour réguler les données
                     keepingSkillsRSSList.append(item)  # Add the skill to the final list
 
-        return keepingSkillsRSSList
+        return keepingSkillsRSSList'''
 
     def save_skills_lists_in_file(list, filename):
         with open(filename, 'w') as fp:
