@@ -470,9 +470,16 @@ class resumeparse(object):
 
         else:
             resume_lines = None
-        resume_segments = resumeparse.segment(resume_lines)
+
+        resume_lines_treated = [] #pré-traitement sur les lignes du CV
+        for lines in resume_lines:
+            lines = lines.replace('◼', '') #enleve bullet points
+            #lines = re.sub('[^a-zA-Z0-9 \n\.]', ' ', lines)  # enleve beaucoup de choses
+            resume_lines_treated.append(lines)
+
+        resume_segments = resumeparse.segment(resume_lines_treated)
         #linkedin_skills = resumeparse.search_CV_skills_in_linkedin_skills('LINKEDIN_SKILLS_ORIGINAL.txt', resumeparse.pre_treatment(resume_lines))
-        strTest = resumeparse.pre_treatment(resume_lines)
+        linkedin_skills = resumeparse.flat_linkedin_recognition('LINKEDIN_SKILLS_ORIGINAL.txt', resumeparse.pre_treatment(resume_lines))
 
         skills = ""
 
@@ -492,10 +499,10 @@ class resumeparse(object):
 
 
         resumeparse.save_skills_lists_in_file(result, "Skills section.txt")
-        #resumeparse.save_skills_lists_in_file(linkedin_skills, "Skills linkedin.txt")
+        resumeparse.save_skills_lists_in_file(linkedin_skills, "Skills linkedin.txt")
         return {
             "skills from skill section": resume_segments,
-            "skills from fuzzywuzzy": ""#linkedin_skills
+            "skills from linkedin": linkedin_skills
         }
 
     '''
@@ -508,8 +515,6 @@ class resumeparse(object):
         bigString = resumeparse.remove_stopwords(bigString) #Enleve les mots inutiles francais et anglais
         bigString = resumeparse.remove_duplicate(bigString) #Enleve les doublons
         bigString = "".join(bigString)
-        bigString = resumeparse.flat_linkedin_recognition('LINKEDIN_SKILLS_ORIGINAL.txt', bigString)
-        print(bigString)
         return bigString
 
 
@@ -534,7 +539,7 @@ class resumeparse(object):
     def remove_punct_and_emphases(text):
 
         text = unidecode.unidecode(text) #enleve accent
-
+        #print(text)
         exclude = string.punctuation
         #On a choisi de ne pas exclure le '+' qui est dans string.punctuation de base notamment pour skill C++
         #donc on remplace le + de notre string exclude par ''
