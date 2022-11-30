@@ -27,6 +27,8 @@ from thefuzz import process
 import pandas as pd
 import Levenshtein as lev
 import json
+import unidecode
+
 
 
 class resumeparse(object):
@@ -469,8 +471,8 @@ class resumeparse(object):
         else:
             resume_lines = None
         resume_segments = resumeparse.segment(resume_lines)
-        linkedin_skills = resumeparse.search_CV_skills_in_linkedin_skills('LINKEDIN_SKILLS_ORIGINAL.txt', resumeparse.pre_treatment(resume_lines))
-
+        #linkedin_skills = resumeparse.search_CV_skills_in_linkedin_skills('LINKEDIN_SKILLS_ORIGINAL.txt', resumeparse.pre_treatment(resume_lines))
+        strTest = resumeparse.pre_treatment(resume_lines)
 
         skills = ""
 
@@ -493,7 +495,7 @@ class resumeparse(object):
         #resumeparse.save_skills_lists_in_file(linkedin_skills, "Skills linkedin.txt")
         return {
             "skills from skill section": resume_segments,
-            "skills from fuzzywuzzy": linkedin_skills
+            "skills from fuzzywuzzy": ""#linkedin_skills
         }
 
     '''
@@ -502,20 +504,42 @@ class resumeparse(object):
     def pre_treatment(text):
         bigString = " ".join(text) #On cree un unique string avec l'entierete des donnees du CV
         bigString = bigString.lower() #On met tout en minuscule
-        bigString = resumeparse.remove_punct(bigString) #Enleve la ponctuation
+        bigString = resumeparse.remove_punct_and_emphases(bigString) #Enleve la ponctuation
         bigString = resumeparse.remove_stopwords(bigString) #Enleve les mots inutiles francais et anglais
         bigString = resumeparse.remove_duplicate(bigString) #Enleve les doublons
+        bigString = "".join(bigString)
+        bigString = resumeparse.flat_linkedin_recognition('LINKEDIN_SKILLS_ORIGINAL.txt', bigString)
+        print(bigString)
         return bigString
+
+
+    def flat_linkedin_recognition(file_path, text):
+        with open(file_path, 'r', encoding="utf-8") as file:
+            # read all content of a file
+            list_competences = file.readlines()
+
+        result = ""
+        for word in list_competences:
+            wLower = word.strip().lower()
+            if text.find(wLower) != -1:
+                #print(word)
+                result += word
+
+        return result
 
     '''
     Fonction pour enlever la ponctuation d'un string
     On exclut les caracteres choisis dans exclude et on l'applique avec la fonction translate
     '''
-    def remove_punct(text):
+    def remove_punct_and_emphases(text):
+
+        text = unidecode.unidecode(text) #enleve accent
+
         exclude = string.punctuation
         #On a choisi de ne pas exclure le '+' qui est dans string.punctuation de base notamment pour skill C++
         #donc on remplace le + de notre string exclude par ''
-        exclude = exclude.replace('+', '') 
+        exclude = exclude.replace('+', '')
+        exclude = exclude.replace('#', '')
         return text.translate(str.maketrans('', '', exclude))
 
     '''
@@ -523,9 +547,14 @@ class resumeparse(object):
     On constitue la liste de ces mots dans 'stop_words' grace aux fonctions de stopword
     '''
     def remove_stopwords(text):
+        #TODO Demander la langue du CV
         stop_words = stopwords.words('english') + stopwords.words('french')
         words_without_stop_word = []
-        tokens = nltk.word_tokenize(text) #On tokenize notre texte pour traiter mot par mot
+
+        #tokens = nltk.word_tokenize(text) #On tokenize notre texte pour traiter mot par mot
+        #print(tokens)
+
+        tokens = text.split(" ")
         for word in tokens:
             if word in stop_words:
                 continue
