@@ -474,29 +474,16 @@ class resumeparse(object):
         resume_lines_treated = [] #pré-traitement sur les lignes du CV
         for lines in resume_lines:
             lines = lines.replace('◼', '') #enleve bullet points
-            #lines = re.sub('[^a-zA-Z0-9 \n\.]', ' ', lines)  # enleve beaucoup de choses
             resume_lines_treated.append(lines)
 
         resume_segments = resumeparse.segment(resume_lines_treated)
-        #linkedin_skills = resumeparse.search_CV_skills_in_linkedin_skills('LINKEDIN_SKILLS_ORIGINAL.txt', resumeparse.pre_treatment(resume_lines))
         linkedin_skills = resumeparse.flat_linkedin_recognition('LINKEDIN_SKILLS_ORIGINAL.txt', resumeparse.pre_treatment(resume_lines))
-
-        skills = ""
-
-        if len(resume_segments['skills'].keys()):
-            for key, values in resume_segments['skills'].items():
-                skills += re.sub(key, '', ",".join(values), flags=re.IGNORECASE)
-            skills = skills.strip().strip(",").split(",")
 
         result = []
 
         for section, value in resume_segments.items():
             result.append(section)
             result.append(value)
-            '''for sub_section, value_items in value.items():
-                result.append(sub_section)
-                result.append(value_items)'''
-
 
         resumeparse.save_skills_lists_in_file(result, "Skills section.txt")
         resumeparse.save_skills_lists_in_file(linkedin_skills, "Skills linkedin.txt")
@@ -527,8 +514,6 @@ class resumeparse(object):
         for word in list_competences:
             wLower = word.strip().lower()
             if wLower in text.split(): #si une chaine de caractere est présente dans une autre chaine de caractere
-            #if text.find(wLower) != -1:
-                #print(word)
                 result.append(word.rstrip('\n')) #ajoute le resultat a la liste et enleve le \n
 
         return result
@@ -540,7 +525,6 @@ class resumeparse(object):
     def remove_punct_and_emphases(text):
 
         text = unidecode.unidecode(text) #enleve accent
-        #print(text)
         exclude = string.punctuation
         #On a choisi de ne pas exclure le '+' qui est dans string.punctuation de base notamment pour skill C++
         #donc on remplace le + de notre string exclude par ''
@@ -557,9 +541,6 @@ class resumeparse(object):
         stop_words = stopwords.words('english') + stopwords.words('french')
         words_without_stop_word = []
 
-        #tokens = nltk.word_tokenize(text) #On tokenize notre texte pour traiter mot par mot
-        #print(tokens)
-
         tokens = text.split(" ")
         for word in tokens:
             if word in stop_words:
@@ -575,50 +556,12 @@ class resumeparse(object):
         text = list(dict.fromkeys(text))
         return text
 
-    '''def search_CV_skills_in_linkedin_skills(file_path, skills):
-        with open(file_path, 'r', encoding="utf-8") as file:
-            # read all content of a file
-            list_competences = file.readlines()
-            # check if string present in a file
-        
-        keepingSkillsRSSList = []  # Liste des compétences du candidat retenues en comparaison avec le RSS
-
-        for skill in skills:
-            referentiel_SS = [item.lower() for item in list_competences]  # Return items of secondColumn in lowercase
-            funnel = process.extract(skill.lower(), referentiel_SS,
-                                     scorer=fuzz.token_set_ratio)  # S'appuie sur les calculs de distance de Levenshtein, les liens, appartenances et inversions de chaÃ®ne de caractères
-            # print('Similarity score: {}'.format(funnel))
-
-            for item in funnel:
-                if (lev.ratio(item[0],
-                              skill.lower()) >= 0.9):  # Seuil de précision subjectif qui peut etre ajuster pour réguler les données
-                    keepingSkillsRSSList.append(item)  # Add the skill to the final list
-
-        return keepingSkillsRSSList'''
-
     def save_skills_lists_in_file(list, filename):
         with open(filename, 'w') as fp:
             for item in list:
                 # write each item on a new line
                 fp.write("%s\n" % item)
             print('Done')
-
-
-    '''
-    A REVOIR  : Pourrait enlever de l'information
-    
-    
-    nltk.download(‘wordnet’)
-    from nltk.stem import WordNetLemmatizer
-    def lemmatization(word_list):
-        
-        
-        WordNetLemmatizer = WordNetLemmatizer()
-        sent = ‘History is the best subject for teaching’
-        tokens = nltk.word_tokenize(sent)
-        for word in tokens:
-            print(word,’—->’, WordNetLemmatizer.lemmatize(word, pos=’v’))
-    '''
 
 
 
