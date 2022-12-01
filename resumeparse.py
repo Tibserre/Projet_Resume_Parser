@@ -514,7 +514,7 @@ class resumeparse(object):
         bigString = resumeparse.remove_punct_and_emphases(bigString) #Enleve la ponctuation
         bigString = resumeparse.remove_stopwords(bigString) #Enleve les mots inutiles francais et anglais
         bigString = resumeparse.remove_duplicate(bigString) #Enleve les doublons
-        bigString = "".join(bigString)
+        bigString = " ".join(bigString)
         return bigString
 
 
@@ -526,7 +526,8 @@ class resumeparse(object):
         result = []
         for word in list_competences:
             wLower = word.strip().lower()
-            if text.find(wLower) != -1:
+            if wLower in text.split(): #si une chaine de caractere est présente dans une autre chaine de caractere
+            #if text.find(wLower) != -1:
                 #print(word)
                 result.append(word.rstrip('\n')) #ajoute le resultat a la liste et enleve le \n
 
