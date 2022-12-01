@@ -21,6 +21,7 @@ from tika import parser
 import pdfplumber
 import logging
 from nltk.corpus import stopwords
+import json
 
 from thefuzz import fuzz
 from thefuzz import process
@@ -156,7 +157,10 @@ class resumeparse(object):
         'connaissances informatique',
         'programming languages',
         'IT Skills',
-        'Language'
+        'Language',
+        'competences fonctionnelles',
+        'compétences fonctionnelles',
+        'compétences techniques'
     )
 
     misc = (
@@ -341,6 +345,7 @@ class resumeparse(object):
 
             # On met la ligne en minuscule
             header = line.lower()
+            #header = resumeparse.remove_emphases(header)
 
             # L'objectif de cette méthode est de récupérer l'indice de la ligne de chaque en-tête, ce qui permet de
             # délimiter les zones du CV
@@ -487,6 +492,13 @@ class resumeparse(object):
 
         resumeparse.save_skills_lists_in_file(result, "Skills section.txt")
         resumeparse.save_skills_lists_in_file(linkedin_skills, "Skills linkedin.txt")
+
+        #TODO petit strip
+        dictionary = {'skills_section' : resume_segments,
+                      'skills_linkedin' : linkedin_skills}
+        jsonVar = json.dumps(dictionary, indent=2, ensure_ascii=False)
+        #print(jsonVar)
+
         return {
             "skills from skill section": resume_segments,
             "skills from linkedin": linkedin_skills
@@ -498,13 +510,17 @@ class resumeparse(object):
     def pre_treatment(text):
         bigString = " ".join(text) #On cree un unique string avec l'entierete des donnees du CV
         bigString = bigString.lower() #On met tout en minuscule
-        bigString = resumeparse.remove_punct_and_emphases(bigString) #Enleve la ponctuation
+        bigString = resumeparse.remove_emphases(bigString) #Enleve les accents
+        bigString = resumeparse.remove_punct(bigString) #Enleve la ponctuation
         bigString = resumeparse.remove_stopwords(bigString) #Enleve les mots inutiles francais et anglais
         bigString = resumeparse.remove_duplicate(bigString) #Enleve les doublons
         bigString = " ".join(bigString)
         return bigString
 
 
+    '''
+    Fonction de recherche exacte des skills sur l'ensemble du CV dans le fichier des Linkedin skills
+    '''
     def flat_linkedin_recognition(file_path, text):
         with open(file_path, 'r', encoding="utf-8") as file:
             # read all content of a file
@@ -519,12 +535,16 @@ class resumeparse(object):
         return result
 
     '''
+    Fonction qui enleve les accents d'un string
+    '''
+    def remove_emphases(text):
+        return unidecode.unidecode(text) #enleve accent
+
+    '''
     Fonction pour enlever la ponctuation d'un string
     On exclut les caracteres choisis dans exclude et on l'applique avec la fonction translate
     '''
-    def remove_punct_and_emphases(text):
-
-        text = unidecode.unidecode(text) #enleve accent
+    def remove_punct(text):
         exclude = string.punctuation
         #On a choisi de ne pas exclure le '+' qui est dans string.punctuation de base notamment pour skill C++
         #donc on remplace le + de notre string exclude par ''
