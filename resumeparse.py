@@ -158,9 +158,7 @@ class resumeparse(object):
         'programming languages',
         'IT Skills',
         'Language',
-        'competences fonctionnelles',
-        'compétences fonctionnelles',
-        'compétences techniques'
+        'competences fonctionnelles'
     )
 
     misc = (
@@ -345,7 +343,7 @@ class resumeparse(object):
 
             # On met la ligne en minuscule
             header = line.lower()
-            #header = resumeparse.remove_emphases(header)
+            header_rm_emphases = resumeparse.remove_emphases(header)
 
             # L'objectif de cette méthode est de récupérer l'indice de la ligne de chaque en-tête, ce qui permet de
             # délimiter les zones du CV
@@ -362,40 +360,45 @@ class resumeparse(object):
                     resume_indices.append(i)
                     header = [o for o in resumeparse.objective if header.startswith(o)][0]
                     resume_segments['objective'][header] = i
-            elif [w for w in resumeparse.work_and_employment if header.startswith(w)]:
+            elif [w for w in resumeparse.work_and_employment if header_rm_emphases.startswith(w)]:
                 try:
                     resume_segments['work_and_employment'][header]
                 except:
                     resume_indices.append(i)
-                    header = [w for w in resumeparse.work_and_employment if header.startswith(w)][0]
+                    list_header_recognized = [w for w in resumeparse.work_and_employment if header_rm_emphases.startswith(w)]
+                    header = list_header_recognized[-1]
                     resume_segments['work_and_employment'][header] = i
-            elif [e for e in resumeparse.education_and_training if header.startswith(e)]:
+            elif [e for e in resumeparse.education_and_training if header_rm_emphases.startswith(e)]:
                 try:
                     resume_segments['education_and_training'][header]
                 except:
                     resume_indices.append(i)
-                    header = [e for e in resumeparse.education_and_training if header.startswith(e)][0]
+                    list_header_recognized = [e for e in resumeparse.education_and_training if  header_rm_emphases.startswith(e)]
+                    header = list_header_recognized[-1]
                     resume_segments['education_and_training'][header] = i
-            elif [s for s in resumeparse.skills_header if header.startswith(s)]:
+            elif [s for s in resumeparse.skills_header if header_rm_emphases.startswith(s)]:
                 try:
                     resume_segments['skills'][header]
                 except:
                     resume_indices.append(i)
-                    header = [s for s in resumeparse.skills_header if header.startswith(s)][0]
+                    list_header_recognized = [s for s in resumeparse.skills_header if header_rm_emphases.startswith(s)]
+                    header = list_header_recognized[-1]
                     resume_segments['skills'][header] = i
-            elif [m for m in resumeparse.misc if header.startswith(m)]:
+            elif [m for m in resumeparse.misc if header_rm_emphases.startswith(m)]:
                 try:
                     resume_segments['misc'][header]
                 except:
                     resume_indices.append(i)
-                    header = [m for m in resumeparse.misc if header.startswith(m)][0]
+                    list_header_recognized = [m for m in resumeparse.misc if header_rm_emphases.startswith(m)]
+                    header = list_header_recognized[-1]
                     resume_segments['misc'][header] = i
-            elif [a for a in resumeparse.accomplishments if header.startswith(a)]:
+            elif [a for a in resumeparse.accomplishments if header_rm_emphases.startswith(a)]:
                 try:
                     resume_segments['accomplishments'][header]
                 except:
                     resume_indices.append(i)
-                    header = [a for a in resumeparse.accomplishments if header.startswith(a)][0]
+                    list_header_recognized = [a for a in resumeparse.accomplishments if header_rm_emphases.startswith(a)]
+                    header = list_header_recognized[-1]
                     resume_segments['accomplishments'][header] = i
 
     def slice_segments(string_to_search, resume_segments, resume_indices):
