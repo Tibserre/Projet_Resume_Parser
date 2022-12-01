@@ -479,10 +479,7 @@ class resumeparse(object):
         else:
             resume_lines = None
 
-        resume_lines_treated = [] #pré-traitement sur les lignes du CV
-        for lines in resume_lines:
-            lines = lines.replace('◼', '') #enleve bullet points
-            resume_lines_treated.append(lines)
+        resume_lines_treated = resumeparse.resume_lines_treatment(resume_lines)
 
         resume_segments = resumeparse.segment(resume_lines_treated)
         linkedin_skills = resumeparse.flat_linkedin_recognition('LINKEDIN_SKILLS_ORIGINAL.txt', resumeparse.pre_treatment(resume_lines))
@@ -506,7 +503,18 @@ class resumeparse(object):
             "skills from skill section": resume_segments,
             "skills from linkedin": linkedin_skills
         }
+        
+    '''
+    Fonction pre traitement du CV pour les donnees categorisees
+    '''
+    def resume_lines_treatment(resume_lines):
+        resume_lines_treated = []  # pré-traitement sur les lignes du CV
 
+        for lines in resume_lines:
+            lines = lines.replace('◼', '')  # enleve bullet points
+            resume_lines_treated.append(lines)
+
+        return resume_lines_treated
     '''
     Fonction de pre-traitement de nos donnees issues du CV
     '''
