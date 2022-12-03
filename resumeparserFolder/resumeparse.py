@@ -16,18 +16,12 @@ import os
 import string
 
 import docx2txt
-import nltk
 from tika import parser
 import pdfplumber
 import logging
 from nltk.corpus import stopwords
 
-from thefuzz import fuzz
-from thefuzz import process
-import pandas as pd
-import Levenshtein as lev
-import json
-
+import unidecode
 
 class resumeparse(object):
     objective = (
@@ -154,7 +148,8 @@ class resumeparse(object):
         'connaissances informatique',
         'programming languages',
         'IT Skills',
-        'Language'
+        'Language',
+        'competences fonctionnelles'
     )
 
     misc = (
@@ -339,6 +334,7 @@ class resumeparse(object):
 
             # On met la ligne en minuscule
             header = line.lower()
+            header_rm_emphases = resumeparse.remove_emphases(header)
 
             # L'objectif de cette méthode est de récupérer l'indice de la ligne de chaque en-tête, ce qui permet de
             # délimiter les zones du CV
@@ -355,40 +351,45 @@ class resumeparse(object):
                     resume_indices.append(i)
                     header = [o for o in resumeparse.objective if header.startswith(o)][0]
                     resume_segments['objective'][header] = i
-            elif [w for w in resumeparse.work_and_employment if header.startswith(w)]:
+            elif [w for w in resumeparse.work_and_employment if header_rm_emphases.startswith(w)]:
                 try:
                     resume_segments['work_and_employment'][header]
                 except:
                     resume_indices.append(i)
-                    header = [w for w in resumeparse.work_and_employment if header.startswith(w)][0]
+                    list_header_recognized = [w for w in resumeparse.work_and_employment if header_rm_emphases.startswith(w)]
+                    header = list_header_recognized[-1]
                     resume_segments['work_and_employment'][header] = i
-            elif [e for e in resumeparse.education_and_training if header.startswith(e)]:
+            elif [e for e in resumeparse.education_and_training if header_rm_emphases.startswith(e)]:
                 try:
                     resume_segments['education_and_training'][header]
                 except:
                     resume_indices.append(i)
-                    header = [e for e in resumeparse.education_and_training if header.startswith(e)][0]
+                    list_header_recognized = [e for e in resumeparse.education_and_training if  header_rm_emphases.startswith(e)]
+                    header = list_header_recognized[-1]
                     resume_segments['education_and_training'][header] = i
-            elif [s for s in resumeparse.skills_header if header.startswith(s)]:
+            elif [s for s in resumeparse.skills_header if header_rm_emphases.startswith(s)]:
                 try:
                     resume_segments['skills'][header]
                 except:
                     resume_indices.append(i)
-                    header = [s for s in resumeparse.skills_header if header.startswith(s)][0]
+                    list_header_recognized = [s for s in resumeparse.skills_header if header_rm_emphases.startswith(s)]
+                    header = list_header_recognized[-1]
                     resume_segments['skills'][header] = i
-            elif [m for m in resumeparse.misc if header.startswith(m)]:
+            elif [m for m in resumeparse.misc if header_rm_emphases.startswith(m)]:
                 try:
                     resume_segments['misc'][header]
                 except:
                     resume_indices.append(i)
-                    header = [m for m in resumeparse.misc if header.startswith(m)][0]
+                    list_header_recognized = [m for m in resumeparse.misc if header_rm_emphases.startswith(m)]
+                    header = list_header_recognized[-1]
                     resume_segments['misc'][header] = i
-            elif [a for a in resumeparse.accomplishments if header.startswith(a)]:
+            elif [a for a in resumeparse.accomplishments if header_rm_emphases.startswith(a)]:
                 try:
                     resume_segments['accomplishments'][header]
                 except:
                     resume_indices.append(i)
-                    header = [a for a in resumeparse.accomplishments if header.startswith(a)][0]
+                    list_header_recognized = [a for a in resumeparse.accomplishments if header_rm_emphases.startswith(a)]
+                    header = list_header_recognized[-1]
                     resume_segments['accomplishments'][header] = i
 
     def slice_segments(string_to_search, resume_segments, resume_indices):
@@ -468,44 +469,80 @@ class resumeparse(object):
 
         else:
             resume_lines = None
-        resume_segments = resumeparse.segment(resume_lines)
-        linkedin_skills = resumeparse.search_CV_skills_in_linkedin_skills('LINKEDIN_SKILLS_ORIGINAL.txt', resumeparse.pre_treatment(resume_lines))
 
+        resume_lines_treated = resumeparse.resume_lines_treatment(resume_lines)
 
-        skills = ""
-
-        if len(resume_segments['skills'].keys()):
-            for key, values in resume_segments['skills'].items():
-                skills += re.sub(key, '', ",".join(values), flags=re.IGNORECASE)
-            skills = skills.strip().strip(",").split(",")
+        resume_segments = resumeparse.segment(resume_lines_treated)
+        linkedin_skills = resumeparse.flat_linkedin_recognition('resumeparserFolder/LINKEDIN_SKILLS_ORIGINAL.txt', resumeparse.pre_treatment(resume_lines))
 
         result = []
 
         for section, value in resume_segments.items():
             result.append(section)
             result.append(value)
-            '''for sub_section, value_items in value.items():
-                result.append(sub_section)
-                result.append(value_items)'''
 
-
+        '''
         resumeparse.save_skills_lists_in_file(result, "Skills section.txt")
-        #resumeparse.save_skills_lists_in_file(linkedin_skills, "Skills linkedin.txt")
+        resumeparse.save_skills_lists_in_file(linkedin_skills, "Skills linkedin.txt")
+        '''
+
+        ''''#TODO petit strip
+        dictionary = {'skills_section' : resume_segments,
+                      'skills_linkedin' : linkedin_skills}
+        jsonVar = json.dumps(dictionary, indent=2, ensure_ascii=False)
+        #print(jsonVar)'''
+
         return {
-            "skills from skill section": resume_segments,
-            "skills from fuzzywuzzy": linkedin_skills
+            "dictionary" : resume_segments,
+            "linkedin skills" : linkedin_skills
         }
 
+    '''
+    Fonction pre traitement du CV pour les donnees categorisees
+    '''
+    def resume_lines_treatment(resume_lines):
+        resume_lines_treated = []  # pré-traitement sur les lignes du CV
+
+        for lines in resume_lines:
+            lines = lines.replace('◼', '')  # enleve bullet points
+            resume_lines_treated.append(lines)
+
+        return resume_lines_treated
     '''
     Fonction de pre-traitement de nos donnees issues du CV
     '''
     def pre_treatment(text):
         bigString = " ".join(text) #On cree un unique string avec l'entierete des donnees du CV
         bigString = bigString.lower() #On met tout en minuscule
+        bigString = resumeparse.remove_emphases(bigString) #Enleve les accents
         bigString = resumeparse.remove_punct(bigString) #Enleve la ponctuation
         bigString = resumeparse.remove_stopwords(bigString) #Enleve les mots inutiles francais et anglais
         bigString = resumeparse.remove_duplicate(bigString) #Enleve les doublons
+        bigString = " ".join(bigString)
         return bigString
+
+
+    '''
+    Fonction de recherche exacte des skills sur l'ensemble du CV dans le fichier des Linkedin skills
+    '''
+    def flat_linkedin_recognition(file_path, text):
+        with open(file_path, 'r', encoding="utf-8") as file:
+            # read all content of a file
+            list_competences = file.readlines()
+
+        result = []
+        for word in list_competences:
+            wLower = word.strip().lower()
+            if wLower in text.split(): #si une chaine de caractere est présente dans une autre chaine de caractere
+                result.append(word.rstrip('\n')) #ajoute le resultat a la liste et enleve le \n
+
+        return result
+
+    '''
+    Fonction qui enleve les accents d'un string
+    '''
+    def remove_emphases(text):
+        return unidecode.unidecode(text) #enleve accent
 
     '''
     Fonction pour enlever la ponctuation d'un string
@@ -515,7 +552,8 @@ class resumeparse(object):
         exclude = string.punctuation
         #On a choisi de ne pas exclure le '+' qui est dans string.punctuation de base notamment pour skill C++
         #donc on remplace le + de notre string exclude par ''
-        exclude = exclude.replace('+', '') 
+        exclude = exclude.replace('+', '')
+        exclude = exclude.replace('#', '')
         return text.translate(str.maketrans('', '', exclude))
 
     '''
@@ -523,9 +561,11 @@ class resumeparse(object):
     On constitue la liste de ces mots dans 'stop_words' grace aux fonctions de stopword
     '''
     def remove_stopwords(text):
+        #TODO Demander la langue du CV
         stop_words = stopwords.words('english') + stopwords.words('french')
         words_without_stop_word = []
-        tokens = nltk.word_tokenize(text) #On tokenize notre texte pour traiter mot par mot
+
+        tokens = text.split(" ")
         for word in tokens:
             if word in stop_words:
                 continue
@@ -540,50 +580,12 @@ class resumeparse(object):
         text = list(dict.fromkeys(text))
         return text
 
-    def search_CV_skills_in_linkedin_skills(file_path, skills):
-        with open(file_path, 'r', encoding="utf-8") as file:
-            # read all content of a file
-            list_competences = file.readlines()
-            # check if string present in a file
-        
-        keepingSkillsRSSList = []  # Liste des compétences du candidat retenues en comparaison avec le RSS
-
-        for skill in skills:
-            referentiel_SS = [item.lower() for item in list_competences]  # Return items of secondColumn in lowercase
-            funnel = process.extract(skill.lower(), referentiel_SS,
-                                     scorer=fuzz.token_set_ratio)  # S'appuie sur les calculs de distance de Levenshtein, les liens, appartenances et inversions de chaÃ®ne de caractères
-            # print('Similarity score: {}'.format(funnel))
-
-            for item in funnel:
-                if (lev.ratio(item[0],
-                              skill.lower()) >= 0.9):  # Seuil de précision subjectif qui peut etre ajuster pour réguler les données
-                    keepingSkillsRSSList.append(item)  # Add the skill to the final list
-
-        return keepingSkillsRSSList
-
     def save_skills_lists_in_file(list, filename):
         with open(filename, 'w') as fp:
             for item in list:
                 # write each item on a new line
                 fp.write("%s\n" % item)
             print('Done')
-
-
-    '''
-    A REVOIR  : Pourrait enlever de l'information
-    
-    
-    nltk.download(‘wordnet’)
-    from nltk.stem import WordNetLemmatizer
-    def lemmatization(word_list):
-        
-        
-        WordNetLemmatizer = WordNetLemmatizer()
-        sent = ‘History is the best subject for teaching’
-        tokens = nltk.word_tokenize(sent)
-        for word in tokens:
-            print(word,’—->’, WordNetLemmatizer.lemmatize(word, pos=’v’))
-    '''
 
 
 
