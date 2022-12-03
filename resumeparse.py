@@ -490,20 +490,22 @@ class resumeparse(object):
             result.append(section)
             result.append(value)
 
+        '''
         resumeparse.save_skills_lists_in_file(result, "Skills section.txt")
         resumeparse.save_skills_lists_in_file(linkedin_skills, "Skills linkedin.txt")
+        '''
 
-        #TODO petit strip
+        ''''#TODO petit strip
         dictionary = {'skills_section' : resume_segments,
                       'skills_linkedin' : linkedin_skills}
         jsonVar = json.dumps(dictionary, indent=2, ensure_ascii=False)
-        #print(jsonVar)
+        #print(jsonVar)'''
 
         return {
-            "skills from skill section": resume_segments,
-            "skills from linkedin": linkedin_skills
+            "dictionary" : resume_segments,
+            "linkedin skills" : linkedin_skills
         }
-        
+
     '''
     Fonction pre traitement du CV pour les donnees categorisees
     '''
