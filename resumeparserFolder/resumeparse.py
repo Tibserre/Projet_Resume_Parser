@@ -592,26 +592,24 @@ class resumeparse(object):
     '''
     Fonction pour récupérer les compétences optimisées pour Fuzzywuzzy
     '''
-    def getAllSkills(data):
-    organized_skills = []
+    def getAllSkills(data: dict):
+        organized_skills = []
 
-    for section, value in data.items():
-        if (section == "linkedin skills"):
-            lk_skills = value
-        else:
-            for sub_section, sub_value in value.items():
-                if (sub_section == "skills"):
-                    for sub_sub_section, sub_sub_value in sub_value.items():
-                        for last_values in sub_sub_value:
-                            organized_skills.append(last_values)
+        for section, value in data.items():
+            if (section == "linkedin skills"):
+                lk_skills = value
+            else:
+                for sub_section, sub_value in value.items():
+                    if (sub_section == "skills"):
+                        for sub_sub_section, sub_sub_value in sub_value.items():
+                            for last_values in sub_sub_value:
+                                organized_skills.append(last_values)
 
-    all_skills = []
-    for skill in organized_skills:
-        all_skills.append(skill)
+        all_skills = []
+        for skill in organized_skills:
+            all_skills.append(skill)
 
-    for skill in lk_skills:
-        all_skills.append(skill)
+        for skill in lk_skills:
+            all_skills.append(skill)
 
-    print(all_skills)
-
-    return remove_duplicate(all_skills)
+        return resumeparse.remove_duplicate(all_skills)

@@ -1,21 +1,23 @@
 from RCSS.rcss import rcssSkillRecognition
-from resumeparserFolder.resumeparse import read_file, getAllSkills
+from resumeparserFolder.resumeparse import resumeparse
 # from resumeParser.resume_parser import getContacts, getSkillsList, getFormation, getExperiences
 import json
 
-
-data = read_file("./CV/CV_NicolasBEQUE_English.pdf")
+data2 = resumeparse.read_file("./CV/CV - AMO.pdf")
+data = resumeparse.read_file("./CV/CV_NicolasBEQUE_English.pdf")
 
 
 '''Sans Fuzzywuzzy'''
 
 
 '''Avec Fuzzywuzzy'''
-all_skills = getAllSkills(data)
+all_skills = resumeparse.getAllSkills(data2)
 
 print(all_skills)
 
-rcssSkillRecognition(skills=all_skills)
+print(rcssSkillRecognition(skills=all_skills))
+
+
 
 
 #################################### SANDBOX ####################################
@@ -23,7 +25,7 @@ rcssSkillRecognition(skills=all_skills)
 # def getJsonOfResume():
 
 #     resume = {
-#         'contacts': contacts, # get infos/contact in json format
+#         'contacts': resumeparse.getContact, # get infos/contact in json format
 #         'skills': , # get skills_JSON
 #         'formation': formation, # get formation in json format
 #         'experiences': experiences # get experiences in json format
