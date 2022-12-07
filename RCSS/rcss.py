@@ -12,8 +12,6 @@ from thefuzz import process
 import Levenshtein as lev
 import json
 
-# skills étant la liste des compétences extraites du CV du candidat, à récupérer d'Anne & Nicolas
-# skills = ["sql", "C++", "Postman", "c", "C#", "Gestion documents", "CDP", "Corea"]
 
 def rcssSkillRecognition(skills: list[str]):
 
@@ -51,13 +49,7 @@ def rcssSkillRecognition(skills: list[str]):
     skills_technique = [item.lower() for item in skills_technique]
 
 
-    # Fonction qui permet d'enlever le premier mot avant le premier "-"
-    # def substring_after(initialString, delimiter):
-    #     return initialString.partition(delimiter)[2]
-
-
     ##### Récupération des compétences pour seulement pour df1 #####
-
     for i in range(len(skills_metiers)):
         # skills_metiers[i] = substring_after(skills_metiers[i], "- ") # Permet de supprimer le premier élément
         skills_metiers[i] = skills_metiers[i].split(" - ")
@@ -65,6 +57,7 @@ def rcssSkillRecognition(skills: list[str]):
         for item in skills_metiers[i]:
             for skill in skills:
                 funnel = process.extract(skill.lower(), skills_metiers[i], scorer=fuzz.partial_ratio)
+                
 
                 for element in funnel:
                     if (lev.ratio(element[0], skill.lower()) >= 0.85): # Seuil de précision subjectif qui peut être ajuster pour réguler les données
@@ -73,7 +66,6 @@ def rcssSkillRecognition(skills: list[str]):
 
 
     ##### Récupération des compétences pour les dataframes df2 à df5 #####
-
     for dataframe in list_competences:
         for skill in skills:
             secondColumn = dataframe.iloc[:, 1] # Récupérer uniquement les deuxièmes colonnes [1] de chaque feuille excel
@@ -119,12 +111,6 @@ def rcssSkillRecognition(skills: list[str]):
 
     # Transform lists in JSON
     dictionary = {'Skills_metiers': list_comp_metiers, 'Skills_applicatives': list_comp_applicatif, 'Skills_methodo': list_comp_methodo, 'Skills_outils': list_comp_outils, 'Skills_techniques': list_comp_technique}
-    skills_JSON = json.dumps(dictionary, indent=2)
+    skills_JSON = json.dumps(dictionary, indent=2, ensure_ascii=False)
 
-    # Print in console a JSON
-    # return skills_JSON
-    return print(skills_JSON)
-
-
-# Test de la fonction avec une liste de compétences aléatoire
-# rcssSkillRecognition(skills=skills)
+    return skills_JSON
