@@ -111,6 +111,6 @@ def rcssSkillRecognition(skills: list[str]):
 
     # Transform lists in JSON
     dictionary = {'Skills_metiers': list_comp_metiers, 'Skills_applicatives': list_comp_applicatif, 'Skills_methodo': list_comp_methodo, 'Skills_outils': list_comp_outils, 'Skills_techniques': list_comp_technique}
-    skills_JSON = json.dumps(dictionary, indent=2, ensure_ascii=False)
+    #skills_JSON = json.dumps(dictionary, indent=2, ensure_ascii=False)
 
-    return skills_JSON
+    return dictionary #skills_JSON

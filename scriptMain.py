@@ -4,20 +4,39 @@ from resumeparserFolder.resumeparse import resumeparse
 import json
 
 #data2 = resumeparse.read_file("./CV/CV - AMO.pdf")
-data = resumeparse.read_file("./CV/CV_NicolasBEQUE_English.pdf")
-
+data = resumeparse.read_file("./CV/CV - DJU.doc")
 
 '''Sans Fuzzywuzzy'''
 
+def getJsonOfResume(data: dict):
+     resume = {
+         'formation' :                  data['education_and_training'], # get formation in json format
+         'professionnal_experiences':   data['work_and_employment'],    # get experiences in json format
+         'skills':                      data['skills'],                 # get skills_JSON
+         'linkedin_skills':             data['linkedin_skills']         # get linkedin_skills
+     }
+
+     resume_Json = json.dumps(resume, indent=2, ensure_ascii=False)
+
+     return resume_Json
+
+#print(getJsonOfResume(data))
+
 
 '''Avec Fuzzywuzzy'''
-all_skills = resumeparse.getAllSkills(data)
 
-rcssSkillRecognition(skills=all_skills)
+def getJsonOfResumeWithFuzzy(data: dict):
+    resume = {
+        'formation':                    data['education_and_training'],  # get formation in json format
+        'professionnal_experiences':    data['work_and_employment'],  # get experiences in json format
+        'skills':                       rcssSkillRecognition(skills=resumeparse.getAllSkills(data)),  # get skills_JSON
+    }
 
+    resume_Json = json.dumps(resume, indent=2, ensure_ascii=False)
 
+    return resume_Json
 
-
+print(getJsonOfResumeWithFuzzy(data))
 #################################### SANDBOX ####################################
 
 # def getJsonOfResume():

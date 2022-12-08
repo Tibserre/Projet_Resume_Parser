@@ -20,6 +20,7 @@ from tika import parser
 import pdfplumber
 import logging
 from nltk.corpus import stopwords
+import json
 
 import unidecode
 
@@ -149,7 +150,8 @@ class resumeparse(object):
         'programming languages',
         'IT Skills',
         'Language',
-        'competences fonctionnelles'
+        'competences fonctionnelles',
+        'competences thematiques'
     )
 
     misc = (
@@ -477,15 +479,9 @@ class resumeparse(object):
         resume_segments['linkedin_skills'] = resumeparse.flat_linkedin_recognition('resumeparserFolder/LINKEDIN_SKILLS_ORIGINAL.txt', resumeparse.pre_treatment(resume_lines))
 
         '''
-        resumeparse.save_skills_lists_in_file(result, "Skills section.txt")
+        resumeparse.save_skills_lists_in_file(resume_segments, "Skills section.txt")
         resumeparse.save_skills_lists_in_file(linkedin_skills, "Skills linkedin.txt")
         '''
-
-        ''''#TODO petit strip
-        dictionary = {'skills_section' : resume_segments,
-                      'skills_linkedin' : linkedin_skills}
-        jsonVar = json.dumps(dictionary, indent=2, ensure_ascii=False)
-        #print(jsonVar)'''
 
         return resume_segments
 
@@ -497,6 +493,9 @@ class resumeparse(object):
 
         for lines in resume_lines:
             lines = lines.replace('◼', '')  # enleve bullet points
+            lines = lines.replace('•', '')  # enleve bullet points
+            lines = lines.replace('·', '')  # enleve bullet points
+            lines = lines.strip()
             resume_lines_treated.append(lines)
 
         return resume_lines_treated
@@ -606,3 +605,9 @@ class resumeparse(object):
             all_skills.append(skill)
 
         return resumeparse.remove_duplicate(all_skills)
+
+    '''
+    Fonction qui return notre dictionnaire au format json
+    '''
+    def getJson(data):
+        return json.dumps(data, indent=2, ensure_ascii=False)
