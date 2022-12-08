@@ -430,6 +430,7 @@ class resumeparse(object):
             'work_and_employment': {},
             'education_and_training': {},
             'skills': {},
+            'linkedin_skills': {}, #skills extraits du fichier LINKEDIN_SKILLS_ORIGINAL.txt
             'accomplishments': {},
             'misc': {}
         }
@@ -473,13 +474,7 @@ class resumeparse(object):
         resume_lines_treated = resumeparse.resume_lines_treatment(resume_lines)
 
         resume_segments = resumeparse.segment(resume_lines_treated)
-        linkedin_skills = resumeparse.flat_linkedin_recognition('resumeparserFolder/LINKEDIN_SKILLS_ORIGINAL.txt', resumeparse.pre_treatment(resume_lines))
-
-        result = []
-
-        for section, value in resume_segments.items():
-            result.append(section)
-            result.append(value)
+        resume_segments['linkedin_skills'] = resumeparse.flat_linkedin_recognition('resumeparserFolder/LINKEDIN_SKILLS_ORIGINAL.txt', resumeparse.pre_treatment(resume_lines))
 
         '''
         resumeparse.save_skills_lists_in_file(result, "Skills section.txt")
@@ -492,10 +487,7 @@ class resumeparse(object):
         jsonVar = json.dumps(dictionary, indent=2, ensure_ascii=False)
         #print(jsonVar)'''
 
-        return {
-            "dictionary" : resume_segments,
-            "linkedin skills" : linkedin_skills
-        }
+        return resume_segments
 
     '''
     Fonction pre traitement du CV pour les donnees categorisees
@@ -595,17 +587,18 @@ class resumeparse(object):
     def getAllSkills(data: dict):
         organized_skills = []
 
+        lk_skills = []
+
         for section, value in data.items():
-            if (section == "linkedin skills"):
+            if (section == "linkedin_skills"):
                 lk_skills = value
-            else:
+            if (section == "skills"):
                 for sub_section, sub_value in value.items():
-                    if (sub_section == "skills"):
-                        for sub_sub_section, sub_sub_value in sub_value.items():
-                            for last_values in sub_sub_value:
-                                organized_skills.append(last_values)
+                    for last_values in sub_value:
+                        organized_skills.append(last_values)
 
         all_skills = []
+
         for skill in organized_skills:
             all_skills.append(skill)
 

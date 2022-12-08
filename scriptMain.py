@@ -3,7 +3,7 @@ from resumeparserFolder.resumeparse import resumeparse
 # from resumeParser.resume_parser import getContacts, getSkillsList, getFormation, getExperiences
 import json
 
-data2 = resumeparse.read_file("./CV/CV - AMO.pdf")
+#data2 = resumeparse.read_file("./CV/CV - AMO.pdf")
 data = resumeparse.read_file("./CV/CV_NicolasBEQUE_English.pdf")
 
 
@@ -11,11 +11,9 @@ data = resumeparse.read_file("./CV/CV_NicolasBEQUE_English.pdf")
 
 
 '''Avec Fuzzywuzzy'''
-all_skills = resumeparse.getAllSkills(data2)
+all_skills = resumeparse.getAllSkills(data)
 
-print(all_skills)
-
-print(rcssSkillRecognition(skills=all_skills))
+rcssSkillRecognition(skills=all_skills)
 
 
 
