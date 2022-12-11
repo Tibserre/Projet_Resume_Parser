@@ -24,6 +24,7 @@ def main():
 
 def uploadCV(files):
  
+ 
     files = request.files.getlist('files[]')
     
     errors = {}
@@ -32,12 +33,7 @@ def uploadCV(files):
     for file in files:      
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-
-            
-            
-           
             success = True
         else:
                 errors[file.filename] = 'File type is not allowed'
@@ -73,12 +69,12 @@ def validateCV(files):
             resp = jsonify(errors)
             resp.status_code = 500
             return resp
-
+    
 
 @app.route('/resume-parser', methods=['POST'])   
 def resumeParser(files):
     fuzzy = False
-    if validateCV(files):
+    if validateCV(files)==200:
         for file in files:
             data = resumeparse.read_file(file)
 
@@ -87,6 +83,6 @@ def resumeParser(files):
     
     return scriptMain.getJsonOfResume(data)
 
-    
+
 if __name__ == '__main__':
     app.run(debug=True)
