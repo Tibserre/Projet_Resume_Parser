@@ -3,7 +3,7 @@ import os
 import urllib.request
 from werkzeug.utils import secure_filename
 from resumeparserFolder import scriptMain
-
+from resumeparserFolder import resumeparse
 app = Flask(__name__)
  
 app.secret_key = "caircocoders-ednalan"
@@ -21,54 +21,72 @@ def allowed_file(filename):
 def main():
     return 'Bonjour SOPRA STERIA'
  
-@app.route('/upload', methods=['POST'])
-def upload_file(files):
-    # check if the post request has the file part
-    if 'files[]' not in request.files:
-        resp = jsonify({'message' : 'No file part in the request'})
-        resp.status_code = 400
-        return resp
+
+def uploadCV(files):
  
     files = request.files.getlist('files[]')
-     
+    
     errors = {}
     success = False
      
     for file in files:      
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
+            
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+            
+            
+           
             success = True
         else:
-            errors[file.filename] = 'File type is not allowed'
+                errors[file.filename] = 'File type is not allowed'
+    return success
+
+
+def validateCV(files):
+     # check if the post request has the file part
+    if 'files[]' not in request.files:
+        resp = jsonify({'message' : 'No file part in the request'})
+        resp.status_code = 400
+        return resp
+
+    errors = {}
+    success = False
+
  
-    if success and errors:
-        errors['message'] = 'File(s) successfully uploaded'
-        resp = jsonify(errors)
-        resp.status_code = 500
-        return resp
-    if success:
-        resp = jsonify({'message' : 'Files successfully uploaded'})
-        resp.status_code = 201
-        return resp
+    if uploadCV(files) :
+                success = True
     else:
-        resp = jsonify(errors)
-        resp.status_code = 500
-        return resp
+                errors ['message']  = 'File type is not allowed'
+    
+    if success and errors:
+            errors['message'] = 'File(s) successfully uploaded'
+            resp = jsonify(errors)
+            resp.status_code = 500
+            return resp
+    if success:
+            resp = jsonify({'message' : 'Files successfully uploaded'})
+            resp.status_code = 201
+            return resp
+    else:
+            resp = jsonify(errors)
+            resp.status_code = 500
+            return resp
 
 
+@app.route('/resume-parser', methods=['POST'])   
+def resumeParser(files):
+    fuzzy = False
+    if validateCV(files):
+        for file in files:
+            data = resumeparse.read_file(file)
 
-@app.route('/resume-parse',methods=['GET'])
-def getResumeSkills(data : dict):
+    if fuzzy == True:
+        return scriptMain.getJsonOfResumeWithFuzzy(data)
+    
     return scriptMain.getJsonOfResume(data)
-  
 
-
-
-@app.route('/resume-parse-fuzzy',methods=['GET'])
-def getResumeSkillsWithFuzzy():
-    return 
-
-
+    
 if __name__ == '__main__':
     app.run(debug=True)

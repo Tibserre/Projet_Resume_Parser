@@ -9,9 +9,9 @@ import json
 
 '''Sans Fuzzywuzzy'''
 
-class scriptMain(object):
 
-    def getJsonOfResume(data: dict):
+
+def getJsonOfResume(data: dict):
         resume = {
             'formation' :                  data['education_and_training'], # get formation in json format
             'professionnal_experiences':   data['work_and_employment'],    # get experiences in json format
@@ -25,9 +25,9 @@ class scriptMain(object):
     #print(getJsonOfResume(data))
 
 
-    '''Avec Fuzzywuzzy'''
+'''Avec Fuzzywuzzy'''
 
-    def getJsonOfResumeWithFuzzy(data: dict):
+def getJsonOfResumeWithFuzzy(data: dict):
         resume = {
             'formation':                    data['education_and_training'],  # get formation in json format
             'professionnal_experiences':    data['work_and_employment'],  # get experiences in json format
