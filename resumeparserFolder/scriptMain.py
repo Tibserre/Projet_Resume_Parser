@@ -1,7 +1,7 @@
 
 from resumeparserFolder import resumeparse
 from RCSS.rcss import rcssSkillRecognition
-# from resumeParser.resume_parser import getContacts, getSkillsList, getFormation, getExperiences
+
 import json
 
 #data2 = resumeparse.read_file("./CV/CV - AMO.pdf")
