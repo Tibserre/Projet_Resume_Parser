@@ -2,7 +2,9 @@ from flask import Flask, json, request, jsonify
 import os
 import urllib.request
 from werkzeug.utils import secure_filename
- 
+import scriptMain
+
+
 app = Flask(__name__)
  
 app.secret_key = "caircocoders-ednalan"
@@ -21,7 +23,7 @@ def main():
     return 'Bonjour SOPRA STERIA'
  
 @app.route('/upload', methods=['POST'])
-def upload_file():
+def upload_file(files):
     # check if the post request has the file part
     if 'files[]' not in request.files:
         resp = jsonify({'message' : 'No file part in the request'})
@@ -54,6 +56,20 @@ def upload_file():
         resp = jsonify(errors)
         resp.status_code = 500
         return resp
- 
+
+
+
+@app.route('/resume-parse',methods=['GET'])
+def getResumeSkills(data : dict):
+    return scriptMain.getJsonOfResume(data)
+  
+
+
+
+@app.route('/resume-parse-fuzzy',methods=['GET'])
+def getResumeSkillsWithFuzzy():
+    return 
+
+
 if __name__ == '__main__':
     app.run(debug=True)

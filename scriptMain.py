@@ -8,66 +8,68 @@ data = resumeparse.read_file("./CV/CV - DJU.doc")
 
 '''Sans Fuzzywuzzy'''
 
-def getJsonOfResume(data: dict):
-     resume = {
-         'formation' :                  data['education_and_training'], # get formation in json format
-         'professionnal_experiences':   data['work_and_employment'],    # get experiences in json format
-         'skills':                      data['skills'],                 # get skills_JSON
-         'linkedin_skills':             data['linkedin_skills']         # get linkedin_skills
-     }
+class scriptMain(object):
 
-     resume_Json = json.dumps(resume, indent=2, ensure_ascii=False)
+    def getJsonOfResume(data: dict):
+        resume = {
+            'formation' :                  data['education_and_training'], # get formation in json format
+            'professionnal_experiences':   data['work_and_employment'],    # get experiences in json format
+            'skills':                      data['skills'],                 # get skills_JSON
+            'linkedin_skills':             data['linkedin_skills']         # get linkedin_skills
+        }
 
-     return resume_Json
+        resume_Json = json.dumps(resume, indent=2, ensure_ascii=False)
 
-#print(getJsonOfResume(data))
+        return resume_Json
 
-
-'''Avec Fuzzywuzzy'''
-
-def getJsonOfResumeWithFuzzy(data: dict):
-    resume = {
-        'formation':                    data['education_and_training'],  # get formation in json format
-        'professionnal_experiences':    data['work_and_employment'],  # get experiences in json format
-        'skills':                       rcssSkillRecognition(skills=resumeparse.getAllSkills(data)),  # get skills_JSON
-    }
-
-    resume_Json = json.dumps(resume, indent=2, ensure_ascii=False)
-
-    return resume_Json
-
-print(getJsonOfResumeWithFuzzy(data))
-#################################### SANDBOX ####################################
-
-# def getJsonOfResume():
-
-#     resume = {
-#         'contacts': resumeparse.getContact, # get infos/contact in json format
-#         'skills': , # get skills_JSON
-#         'formation': formation, # get formation in json format
-#         'experiences': experiences # get experiences in json format
-#     }
-
-#     resume_Json = json.dumps(resume)
-
-#     return resume_Json
+    #print(getJsonOfResume(data))
 
 
-# def getJsonOfResumeWithFuzzy():
+    '''Avec Fuzzywuzzy'''
 
-#     resume = {
-#         'contacts': contacts, # get infos/contact in json format
-#         'skills': rcssSkillRecognition(skills=skills), # get skills_JSON
-#         'formation': formation, # get formation in json format
-#         'experiences': experiences # get experiences in json format
-#     }
+    def getJsonOfResumeWithFuzzy(data: dict):
+        resume = {
+            'formation':                    data['education_and_training'],  # get formation in json format
+            'professionnal_experiences':    data['work_and_employment'],  # get experiences in json format
+            'skills':                       rcssSkillRecognition(skills=resumeparse.getAllSkills(data)),  # get skills_JSON
+        }
 
-#     resume_Json = json.dumps(resume)
+        resume_Json = json.dumps(resume, indent=2, ensure_ascii=False)
 
-#     return resume_Json
+        return resume_Json
+
+    print(getJsonOfResumeWithFuzzy(data))
+    #################################### SANDBOX ####################################
+
+    # def getJsonOfResume():
+
+    #     resume = {
+    #         'contacts': resumeparse.getContact, # get infos/contact in json format
+    #         'skills': , # get skills_JSON
+    #         'formation': formation, # get formation in json format
+    #         'experiences': experiences # get experiences in json format
+    #     }
+
+    #     resume_Json = json.dumps(resume)
+
+    #     return resume_Json
 
 
-#
-# Fonction qui permet de faire la connection à la base de données NoSql (MongoDB?):
-# Récupérer le JSON du CV "getJsonOfResume()"" au moment de l'enregistrement dans la collection de CV
+    # def getJsonOfResumeWithFuzzy():
+
+    #     resume = {
+    #         'contacts': contacts, # get infos/contact in json format
+    #         'skills': rcssSkillRecognition(skills=skills), # get skills_JSON
+    #         'formation': formation, # get formation in json format
+    #         'experiences': experiences # get experiences in json format
+    #     }
+
+    #     resume_Json = json.dumps(resume)
+
+    #     return resume_Json
+
+
+    #
+    # Fonction qui permet de faire la connection à la base de données NoSql (MongoDB?):
+    # Récupérer le JSON du CV "getJsonOfResume()"" au moment de l'enregistrement dans la collection de CV
 
