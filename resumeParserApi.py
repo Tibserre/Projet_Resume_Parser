@@ -2,8 +2,8 @@ from flask import Flask, json, request, jsonify
 import os
 import urllib.request
 from werkzeug.utils import secure_filename
- 
-#test
+from resumeparserFolder import scriptMain
+
 app = Flask(__name__)
  
 app.secret_key = "caircocoders-ednalan"

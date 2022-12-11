@@ -13,7 +13,7 @@ import Levenshtein as lev
 import json
 
 
-def rcssSkillRecognition(skills: list[str]):
+def rcssSkillRecognition(skills: dict):
 
     RCSS = pd.ExcelFile("./RCSS/Referentiel_Competences.xlsx")
     df1 = pd.read_excel(RCSS, 'Compétences Métiers')
