@@ -2,8 +2,7 @@ from flask import Flask, json, request, jsonify
 import os
 import urllib.request
 from werkzeug.utils import secure_filename
-import scriptMain
-
+from resumeparserFolder import scriptMain
 
 app = Flask(__name__)
  

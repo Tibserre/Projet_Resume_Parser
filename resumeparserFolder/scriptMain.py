@@ -1,10 +1,11 @@
+
+from resumeparserFolder import resumeparse
 from RCSS.rcss import rcssSkillRecognition
-from resumeparserFolder.resumeparse import resumeparse
-# from resumeParser.resume_parser import getContacts, getSkillsList, getFormation, getExperiences
+
 import json
 
 #data2 = resumeparse.read_file("./CV/CV - AMO.pdf")
-data = resumeparse.read_file("./CV/CV - DJU.doc")
+
 
 '''Sans Fuzzywuzzy'''
 
@@ -20,7 +21,6 @@ class scriptMain(object):
 
         resume_Json = json.dumps(resume, indent=2, ensure_ascii=False)
 
-        return resume_Json
 
     #print(getJsonOfResume(data))
 
@@ -36,9 +36,7 @@ class scriptMain(object):
 
         resume_Json = json.dumps(resume, indent=2, ensure_ascii=False)
 
-        return resume_Json
 
-    print(getJsonOfResumeWithFuzzy(data))
     #################################### SANDBOX ####################################
 
     # def getJsonOfResume():
