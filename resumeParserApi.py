@@ -23,6 +23,7 @@ def main():
     return 'Bonjour SOPRA STERIA'
  
 
+
 def uploadCV(files):
  
  
@@ -71,7 +72,8 @@ def validateCV(files):
             resp.status_code = 500
             return resp
     
-
+    
+"""
 @app.route('/resume-parser', methods=['POST'])   
 
 def resumeParser():
@@ -95,6 +97,6 @@ def resumeParser():
             else :
                 return scriptMain.getJsonOfResume(data)
 
-
+"""
 if __name__ == '__main__':
     app.run(debug=True)
