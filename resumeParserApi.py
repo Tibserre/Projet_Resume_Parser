@@ -53,9 +53,9 @@ def checkExt():
         resp.status_code = 201
         return resp
 
-
-"""
 def validateCV(files):
+    errors = {}
+    success = False
      # check if the post request has the file part
     if 'files[]' not in request.files:
         resp = jsonify({'message' : 'No file part in the request'})
@@ -81,16 +81,20 @@ def validateCV(files):
             resp.status_code = 500
             return resp
     
-    """
+ 
 
 def read_resumes(files):
-    fuzzy = request.form.get('fuzzy')
+    fuzzy = request.form.get('fuzzy') #get la valeur du param fuzzy
    
     for file in files :
+        
         path_to_file = "uploads/"+str(file.filename)
+        pathCorr =path_to_file.replace(" ", "_")
+       
         if fuzzy:
-            data = resumeparse.read_file(path_to_file)
-            JsonExtr=scriptMain.getJsonOfResume(data)
+            data = resumeparse.read_file(pathCorr)
+            JsonExtr=scriptMain.getJsonOfResumeWithFuzzy(data)
+            
             return JsonExtr
 
 
@@ -104,8 +108,9 @@ def resumeParser():
         return 'notOK'
     else :
         if uploadCV(files)==True:
-            #JsonExtre = resumeparse.read_file("CV/CV_NicolasBEQUE_English.pdf")
+            
             JsonExtre = read_resumes(files)
+            
             if JsonExtre == None :
                 return "vide ptn"
             else :
@@ -142,4 +147,4 @@ def resumeParser():
 
 """
 if __name__ == '__main__':
-    app.run(host="localhost", port=2000,debug=True)
+    app.run(host="localhost", port=2000, debug=True)

@@ -20,6 +20,7 @@ def getJsonOfResume(data: dict):
         }
 
         resume_Json = json.dumps(resume, indent=2, ensure_ascii=False)
+        return resume_Json
 
 
     #print(getJsonOfResume(data))
@@ -35,6 +36,7 @@ def getJsonOfResumeWithFuzzy(data: dict):
         }
 
         resume_Json = json.dumps(resume, indent=2, ensure_ascii=False)
+        return resume_Json
 
 
     #################################### SANDBOX ####################################
