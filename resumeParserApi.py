@@ -83,27 +83,35 @@ def validateCV(files):
     
     """
 
-def read_resumes(files, fuzzy):
+def read_resumes(files):
+    fuzzy = request.form.get('fuzzy')
+   
     for file in files :
-        if fuzzy==True:
-            path_to_file = "./upload/"+str(file.filename)
+        path_to_file = "uploads/"+str(file.filename)
+        if fuzzy:
             data = resumeparse.read_file(path_to_file)
-            return data
+            JsonExtr=scriptMain.getJsonOfResume(data)
+            return JsonExtr
 
 
 @app.route('/resume-parser', methods=['POST'])   
 def resumeParser():
     files = []
     files= request.files.getlist('files[]')
-    fuzzy = request.form.get('fuzzy')
+    
 
     if 'files[]' not in request.files:
         return 'notOK'
     else :
         if uploadCV(files)==True:
-            dicExtract = read_resumes(files, fuzzy)
-            dicExtract=str(dicExtract)
-            return dicExtract
+            #JsonExtre = resumeparse.read_file("CV/CV_NicolasBEQUE_English.pdf")
+            JsonExtre = read_resumes(files)
+            if JsonExtre == None :
+                return "vide ptn"
+            else :
+                return JsonExtre
+
+            
         else :
             return "not uploaded"
             
