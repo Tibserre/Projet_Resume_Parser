@@ -42,6 +42,19 @@ def uploadCV(files):
     return success
 
 
+
+def checkExt():
+    if 'files[]' not in request.files:
+        resp = jsonify({'message' : 'No file part in the request'})
+        resp.status_code = 400
+        return resp
+    else :
+        resp = jsonify({'message' : 'One or more files in the request'})
+        resp.status_code = 201
+        return resp
+
+
+"""
 def validateCV(files):
      # check if the post request has the file part
     if 'files[]' not in request.files:
@@ -49,10 +62,6 @@ def validateCV(files):
         resp.status_code = 400
         return resp
 
-    errors = {}
-    success = False
-
- 
     if uploadCV(files) :
                 success = True
     else:
@@ -72,7 +81,23 @@ def validateCV(files):
             resp.status_code = 500
             return resp
     
-    
+    """
+
+
+@app.route('/resume-parser', methods=['POST'])   
+def resumeParser():
+    files = []
+    files= request.files.getlist('files[]')
+
+    if 'files[]' not in request.files:
+        return 'notOK'
+    else :
+        if uploadCV(files)==True:
+            return "OK"
+        else :
+            return "not uploaded"
+            
+
 """
 @app.route('/resume-parser', methods=['POST'])   
 
@@ -99,4 +124,4 @@ def resumeParser():
 
 """
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="localhost", port=2000,debug=True)
