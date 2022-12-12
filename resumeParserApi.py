@@ -75,23 +75,38 @@ def validateCV(files):
 @app.route('/resume-parser', methods=['POST'])   
 
 def resumeParser():
+
     data:dict =""
-
+    files = []
     files= request.files.getlist('files')
-
     fuzzy = request.form.get('fuzzy')
     
+    for file in files:
+        data=resumeparse.resumeparse.read_file(file)
+
+        if fuzzy=="true" :
+            return scriptMain.getJsonOfResumeWithFuzzy(data)
+        else :
+            return scriptMain.getJsonOfResume(data)
+
+
+
+""" 
     if validateCV(files)==200:
         for file in files:
             data = resumeparse.read_file(file)
             print(file)
             print(data)
-            
+
+
+    return tailleChar
+   
     if fuzzy == True:
         return scriptMain.getJsonOfResumeWithFuzzy(data)
     else :
         return scriptMain.getJsonOfResume(data)
 
+"""
 
 if __name__ == '__main__':
     app.run(debug=True)
