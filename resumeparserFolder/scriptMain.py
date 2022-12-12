@@ -1,5 +1,5 @@
 
-from resumeparserFolder import resumeparse
+from resumeparserFolder.resumeparse import resumeparse
 from RCSS.rcss import rcssSkillRecognition
 
 import json

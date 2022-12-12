@@ -4,7 +4,7 @@ import urllib.request
 
 from werkzeug.utils import secure_filename
 from resumeparserFolder import scriptMain
-from resumeparserFolder import resumeparse
+from resumeparserFolder.resumeparse import resumeparse
 app = Flask(__name__)
  
 app.secret_key = "caircocoders-ednalan"
@@ -81,32 +81,20 @@ def resumeParser():
     files= request.files.getlist('files')
     fuzzy = request.form.get('fuzzy')
     
-    for file in files:
-        data=resumeparse.resumeparse.read_file(file)
-
-        if fuzzy=="true" :
-            return scriptMain.getJsonOfResumeWithFuzzy(data)
-        else :
-            return scriptMain.getJsonOfResume(data)
-
-
-
-""" 
-    if validateCV(files)==200:
-        for file in files:
-            data = resumeparse.read_file(file)
-            print(file)
-            print(data)
-
-
-    return tailleChar
    
-    if fuzzy == True:
-        return scriptMain.getJsonOfResumeWithFuzzy(data)
-    else :
-        return scriptMain.getJsonOfResume(data)
 
-"""
+    if validateCV(files)==200:
+        return "ok"
+        for file in files:
+            pathToFile = "./upload/"+"str(file.filename)"
+            #data = resumeparse.read_file(pathToFile)
+         
+
+            if fuzzy == True:
+                return scriptMain.getJsonOfResumeWithFuzzy(data)
+            else :
+                return scriptMain.getJsonOfResume(data)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
