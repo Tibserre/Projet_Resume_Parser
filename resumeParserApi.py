@@ -84,18 +84,24 @@ def validateCV(files):
  
 
 def read_resumes(files):
+    listJson = []
     fuzzy = request.form.get('fuzzy') #get la valeur du param fuzzy
-   
+    
     for file in files :
         
         path_to_file = "uploads/"+str(file.filename)
         pathCorr =path_to_file.replace(" ", "_")
+        data = resumeparse.read_file(pathCorr)
        
         if fuzzy:
-            data = resumeparse.read_file(pathCorr)
             JsonExtr=scriptMain.getJsonOfResumeWithFuzzy(data)
+        else : 
+            JsonExtr=scriptMain.getJsonOfResume(data)
+
+        return JsonExtr
+    
             
-            return JsonExtr
+            
 
 
 @app.route('/resume-parser', methods=['POST'])   
