@@ -1,6 +1,7 @@
 from flask import Flask, json, request, jsonify
 import os
 import urllib.request
+
 from werkzeug.utils import secure_filename
 from resumeparserFolder import scriptMain
 from resumeparserFolder import resumeparse
@@ -76,26 +77,21 @@ def validateCV(files):
 def resumeParser():
     data:dict =""
 
-    files= request.files['files[]']
+    files= request.files.getlist('files')
 
     fuzzy = request.form.get('fuzzy')
     
-    
-
     if validateCV(files)==200:
         for file in files:
             data = resumeparse.read_file(file)
             print(file)
             print(data)
             
-
-    return fuzzy
-"""
     if fuzzy == True:
         return scriptMain.getJsonOfResumeWithFuzzy(data)
     else :
         return scriptMain.getJsonOfResume(data)
-"""
+
 
 if __name__ == '__main__':
     app.run(debug=True)
