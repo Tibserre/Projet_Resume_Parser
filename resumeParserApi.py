@@ -98,7 +98,7 @@ def read_resumes(files):
         else : 
             JsonExtr=scriptMain.getJsonOfResume(data)
 
-        return JsonExtr
+    return JsonExtr
     
             
             
@@ -127,30 +127,6 @@ def resumeParser():
             return "not uploaded"
             
 
-"""
-@app.route('/resume-parser', methods=['POST'])   
 
-def resumeParser():
-
-    data:dict =""
-    files = []
-    files= request.files.getlist('files')
-    fuzzy = request.form.get('fuzzy')
-    
-   
-
-    if validateCV(files)==200:
-        return "ok"
-        for file in files:
-            pathToFile = "./upload/"+"str(file.filename)"
-            #data = resumeparse.read_file(pathToFile)
-         
-
-            if fuzzy == True:
-                return scriptMain.getJsonOfResumeWithFuzzy(data)
-            else :
-                return scriptMain.getJsonOfResume(data)
-
-"""
 if __name__ == '__main__':
     app.run(host="localhost", port=2000, debug=True)
