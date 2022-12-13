@@ -23,8 +23,6 @@ def main():
  
 
 def uploadCV(files):
- 
- 
     files = request.files.getlist('files[]')
     
     errors = {}
