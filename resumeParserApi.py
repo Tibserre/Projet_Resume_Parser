@@ -1,9 +1,10 @@
 from flask import Flask, json, request, jsonify
 import os
 import urllib.request
+
 from werkzeug.utils import secure_filename
 from resumeparserFolder import scriptMain
-from resumeparserFolder import resumeparse
+from resumeparserFolder.resumeparse import resumeparse
 app = Flask(__name__)
  
 app.secret_key = "caircocoders-ednalan"
@@ -22,6 +23,7 @@ def main():
     return 'Bonjour SOPRA STERIA'
  
 
+
 def uploadCV(files):
     files = request.files.getlist('files[]')
     
@@ -38,17 +40,26 @@ def uploadCV(files):
     return success
 
 
+
+def checkExt():
+    if 'files[]' not in request.files:
+        resp = jsonify({'message' : 'No file part in the request'})
+        resp.status_code = 400
+        return resp
+    else :
+        resp = jsonify({'message' : 'One or more files in the request'})
+        resp.status_code = 201
+        return resp
+
 def validateCV(files):
+    errors = {}
+    success = False
      # check if the post request has the file part
     if 'files[]' not in request.files:
         resp = jsonify({'message' : 'No file part in the request'})
         resp.status_code = 400
         return resp
 
-    errors = {}
-    success = False
-
- 
     if uploadCV(files) :
                 success = True
     else:
@@ -68,19 +79,76 @@ def validateCV(files):
             resp.status_code = 500
             return resp
     
+ 
+
+def read_resumes(files):
+    listJson = []
+    fuzzy = request.form.get('fuzzy') #get la valeur du param fuzzy
+    
+    for file in files :
+        
+        path_to_file = "uploads/"+str(file.filename)
+        pathCorr =path_to_file.replace(" ", "_")
+        data = resumeparse.read_file(pathCorr)
+       
+        if fuzzy:
+            JsonExtr=scriptMain.getJsonOfResumeWithFuzzy(data)
+        else : 
+            JsonExtr=scriptMain.getJsonOfResume(data)
+
+        return JsonExtr
+    
+            
+            
+
 
 @app.route('/resume-parser', methods=['POST'])   
-def resumeParser(files):
-    fuzzy = False
-    if validateCV(files)==200:
-        for file in files:
-            data = resumeparse.read_file(file)
-
-    if fuzzy == True:
-        return scriptMain.getJsonOfResumeWithFuzzy(data)
+def resumeParser():
+    files = []
+    files= request.files.getlist('files[]')
     
-    return scriptMain.getJsonOfResume(data)
 
+    if 'files[]' not in request.files:
+        return 'notOK'
+    else :
+        if uploadCV(files)==True:
+            
+            JsonExtre = read_resumes(files)
+            
+            if JsonExtre == None :
+                return "vide ptn"
+            else :
+                return JsonExtre
 
+            
+        else :
+            return "not uploaded"
+            
+
+"""
+@app.route('/resume-parser', methods=['POST'])   
+
+def resumeParser():
+
+    data:dict =""
+    files = []
+    files= request.files.getlist('files')
+    fuzzy = request.form.get('fuzzy')
+    
+   
+
+    if validateCV(files)==200:
+        return "ok"
+        for file in files:
+            pathToFile = "./upload/"+"str(file.filename)"
+            #data = resumeparse.read_file(pathToFile)
+         
+
+            if fuzzy == True:
+                return scriptMain.getJsonOfResumeWithFuzzy(data)
+            else :
+                return scriptMain.getJsonOfResume(data)
+
+"""
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="localhost", port=2000, debug=True)
