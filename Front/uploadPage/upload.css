@@ -1,0 +1,27 @@
+
+ @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+.boutonRetour{
+    padding: 0.5rem;
+    margin: 1rem;
+    border-radius: 200px;
+    outline : 2px solid;
+    outline-color: rgb(47, 47, 47);
+    display: flex;
+    width: fit-content;
+    height: fit-content;
+    color: rgb(47, 47, 47);
+}
+
+
+
+.container{
+    width: auto;
+    /* Center child horizontally*/
+    display: flex;
+    justify-content: center;
+}
+.title{
+    font-family: 'Poppins', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+}
