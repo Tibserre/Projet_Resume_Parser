@@ -5,6 +5,7 @@ import urllib.request
 from werkzeug.utils import secure_filename
 from resumeparserFolder import scriptMain
 from resumeparserFolder.resumeparse import resumeparse
+from jsonmerge import merge
 app = Flask(__name__)
  
 app.secret_key = "caircocoders-ednalan"
@@ -84,21 +85,31 @@ def validateCV(files):
  
 
 def read_resumes(files):
-    listJson = []
-    fuzzy = request.form.get('fuzzy') #get la valeur du param fuzzy
     
+    fuzzy = request.form.get('fuzzy') #get la valeur du param fuzzy
+    allResumes = {}
+
     for file in files :
-        
+        fileName= str(file.filename)
+        file_name = fileName.replace(" ", "_")
         path_to_file = "uploads/"+str(file.filename)
         pathCorr =path_to_file.replace(" ", "_")
         data = resumeparse.read_file(pathCorr)
-       
-        if fuzzy:
-            JsonExtr=scriptMain.getJsonOfResumeWithFuzzy(data)
-        else : 
-            JsonExtr=scriptMain.getJsonOfResume(data)
 
-    return JsonExtr
+        #original json struct 
+        if fuzzy:
+            jsonExtr=scriptMain.getJsonOfResumeWithFuzzy(data)
+        else : 
+            jsonExtr=scriptMain.getJsonOfResume(data)
+
+        #On transforme en dict pour travailler avec, et ajout d'une clé et d'une valeur
+        jsonExtrCastedToDict = json.loads(jsonExtr)
+        #jsonExtrCastedToDict["NameFile"]= file_name
+  
+        allResumes[file_name]=jsonExtrCastedToDict
+        
+
+    return allResumes
     
             
             
