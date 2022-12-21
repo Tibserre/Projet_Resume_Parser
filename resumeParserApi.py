@@ -1,4 +1,5 @@
 from flask import Flask, json, request, jsonify
+from flask_cors import CORS
 import os
 import urllib.request
 
@@ -6,7 +7,10 @@ from werkzeug.utils import secure_filename
 from resumeparserFolder import scriptMain
 from resumeparserFolder.resumeparse import resumeparse
 from jsonmerge import merge
+
 app = Flask(__name__)
+CORS(app)
+
  
 app.secret_key = "caircocoders-ednalan"
  
@@ -25,9 +29,10 @@ def main():
  
 
 
+
 def uploadCV(files):
  
- 
+
     files = request.files.getlist('files[]')
     
     errors = {}
@@ -122,7 +127,7 @@ def read_resumes(files):
 def resumeParser():
     files = []
     files= request.files.getlist('files[]')
-    
+    responseJson = {}
 
     if 'files[]' not in request.files:
         return 'notOK'
@@ -132,13 +137,17 @@ def resumeParser():
             JsonExtre = read_resumes(files)
             
             if JsonExtre == None :
-                return "vide ptn"
+                rep="VidePtn"
+                responseJson["reponse"]=rep
+                return responseJson
             else :
                 return JsonExtre
 
             
         else :
-            return "not uploaded"
+            rep="not uploaded"
+            responseJson["reponse"]=rep
+            return responseJson 
             
 
 

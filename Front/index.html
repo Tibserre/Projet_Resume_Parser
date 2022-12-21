@@ -1,31 +1,59 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-  <meta charset="utf-8">
-  <title>Gestion CV Sopra Steria</title>
-  <link rel="stylesheet" href="./style.css">
-  <body>
+    <meta charset="utf-8">
+    <title>Gestion CV Sopra Steria</title>
+    <link rel="stylesheet" href="./style.css">
+
+<body>
 
     <div class="header">
-    <h3>Bienvenue sur l'IHM de Gestion de CV Sopra Steria</h3>
+        <h3>Bienvenue sur l'IHM de Gestion de CV Sopra Steria</h3>
     </div>
 
     <div class="middle">
-    <label class="switch">
-        <input type="checkbox">
-        <span class="slider round"></span>
-    </label>
-    <p> Activer la fonction fuzzy wuzzy</p>
+        <label class="switch">
+            <input type="checkbox">
+            <span class="slider round"></span>
+        </label>
+        <p> Activer la fonction fuzzy wuzzy</p>
     </div>
 
     <div class="footer">
-        <input type="file" name="upfile"/>
-        <button class="validate"><a href="./uploadPage/upload.html" >Valider</a></button>
+        <input type="file" name="upfile" />
+        <button class="validate" type="submit" onclick="SendPost()"><a>Valider</a></button>
     </div>
 
 </body>
 
+
 <script>
+
+
+
+
+    function SendPost() {
+
+        var input = document.querySelector('input[type="file"]')
+
+        let data = new FormData();
+        data.append('files[]', input.files[0])
+        data.append('fuzzy', 'True')
+
+        fetch('http://127.0.0.1:2000/resume-parser', {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+            .then((response) => response.json())
+            .then((data) => console.log(data));
+    }
+
+
 
 
 </script>
