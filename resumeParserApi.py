@@ -112,8 +112,11 @@ def read_resumes(files):
     return allResumes
     
             
-            
+            #Que dict mais a la fin dict to json !
+            # envoyer ici les fichiers pour les templates 
 
+            #séparer en POST et GET 
+            # Post peut retourner un identifiant par ex ! lié au get 
 
 @app.route('/resume-parser', methods=['POST'])   
 def resumeParser():
