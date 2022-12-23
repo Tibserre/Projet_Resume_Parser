@@ -22,35 +22,47 @@
 
     <div class="footer">
         <input type="file" name="upfile" />
-        <button class="validate" type="submit" onclick="SendPost()"><a>Valider</a></button>
+        <button class="validate" type="button" onclick="SendPost()"><a>Valider</a></button>
     </div>
+    <button class="validate" type="button"
+        onclick="console.log(localStorage.getItem('resumes_parsed'))"><a>afficher local storage</a></button>
 
 </body>
 
 
 <script>
 
+window.onload = function() {
+    EmptyLocalStorage();
+};
 
 
+function EmptyLocalStorage() {
+    localStorage.removeItem('resumes_parsed');
 
+}
     function SendPost() {
+        console.log("inside SendPost");
+        var fileInput = document.querySelector('input[type="file"]')
+        var formdata = new FormData();
+        formdata.append("files[]", fileInput.files[0]);
+        formdata.append("fuzzy", "True");
 
-        var input = document.querySelector('input[type="file"]')
+        var requestOptions = {
+            method: 'POST',
+            body: formdata,
+            redirect: 'follow'
+        };
 
-        let data = new FormData();
-        data.append('files[]', input.files[0])
-        data.append('fuzzy', 'True')
+        fetch("http://127.0.0.1:2000/resume-parser?files[]=", requestOptions)
+            .then(response => response.text())
+            .then(result => {
+                console.log(result);
+                localStorage.setItem("resumes_parsed", result);
+            })
+            .catch(error => console.log('error', error));
 
-        fetch('http://127.0.0.1:2000/resume-parser', {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        })
-            .then((response) => response.json())
-            .then((data) => console.log(data));
+
     }
 
 

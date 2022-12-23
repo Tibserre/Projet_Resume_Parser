@@ -130,7 +130,9 @@ def resumeParser():
     responseJson = {}
 
     if 'files[]' not in request.files:
-        return 'notOK'
+        rep="Aucun fichier"
+        responseJson["reponse"]=rep
+        return responseJson
     else :
         if uploadCV(files)==True:
             
