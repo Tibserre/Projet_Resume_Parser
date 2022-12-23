@@ -41,7 +41,7 @@ function EmptyLocalStorage() {
     localStorage.removeItem('resumes_parsed');
 
 }
-    function SendPost() {
+    async function SendPost() {
         console.log("inside SendPost");
         var fileInput = document.querySelector('input[type="file"]')
         var formdata = new FormData();
@@ -54,8 +54,8 @@ function EmptyLocalStorage() {
             redirect: 'follow'
         };
 
-        fetch("http://127.0.0.1:2000/resume-parser?files[]=", requestOptions)
-            .then(response => response.text())
+        const response = await fetch("http://127.0.0.1:2000/resume-parser?files[]=", requestOptions)
+            .then(response => response.json())
             .then(result => {
                 console.log(result);
                 localStorage.setItem("resumes_parsed", result);
@@ -64,6 +64,7 @@ function EmptyLocalStorage() {
 
 
     }
+
 
 
 
