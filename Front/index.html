@@ -52,7 +52,7 @@
         var fileInput = document.querySelector('input[type="file"]')
         var formdata = new FormData();
         formdata.append("files[]", fileInput.files[0]);
-        formdata.append("fuzzy", "True");
+        formdata.append("fuzzy", "False");
 
         var requestOptions = {
             method: 'POST',
@@ -67,7 +67,6 @@
                 localStorage.setItem("resumes_parsed", JSON.stringify(result));
             })
             .catch(error => console.log('error', error));
-
 
     }
 

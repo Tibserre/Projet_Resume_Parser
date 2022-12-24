@@ -102,7 +102,7 @@ def read_resumes(files):
         data = resumeparse.read_file(pathCorr)
 
         #original json struct 
-        if fuzzy:
+        if fuzzy==True:
             jsonExtr=scriptMain.getJsonOfResumeWithFuzzy(data)
         else : 
             jsonExtr=scriptMain.getJsonOfResume(data)
