@@ -24,8 +24,10 @@
         <input type="file" name="upfile" />
         <button class="validate" type="button" onclick="SendPost()"><a>Valider</a></button>
     </div>
-    <button class="validate" type="button" onclick="afficherLocalStorage()"><a>afficher local storage</a></button>
-    <button class="validate" type="button" onclick="EmptyLocalStorage()"><a>vider local storage</a></button>
+    <div>
+        <button class="validate" type="button" onclick="afficherLocalStorage()"><a>afficher local storage</a></button>
+        <button class="validate" type="button" onclick="EmptyLocalStorage()"><a>vider local storage</a></button>
+    </div>
 
 </body>
 
@@ -47,7 +49,7 @@
         localStorage.removeItem('resumes_parsed');
 
     }
-    async function SendPost() {
+    function SendPost() {
         console.log("inside SendPost");
         var fileInput = document.querySelector('input[type="file"]')
         var formdata = new FormData();
@@ -60,7 +62,7 @@
             redirect: 'follow'
         };
 
-        const response = await fetch("http://127.0.0.1:2000/resume-parser?files[]=", requestOptions)
+        fetch("http://127.0.0.1:2000/resume-parser?files[]=", requestOptions)
             .then(response => response.json())
             .then(result => {
                 console.log(result);
