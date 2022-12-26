@@ -14,7 +14,7 @@
 
     <div class="middle">
         <label class="switch">
-            <input type="checkbox">
+            <input type="checkbox" id="FuzzyState" onclick="CheckState()">
             <span class="slider round"></span>
         </label>
         <p> Activer la fonction fuzzy wuzzy</p>
@@ -22,7 +22,7 @@
 
     <div class="footer">
         <input type="file" name="upfile" />
-        <button class="validate" type="button" onclick="SendPost()"><a>Valider</a></button>
+        <button class="validate" type="button" onclick="SendPost()" ><a>Valider</a></button>
     </div>
     <div>
         <button class="validate" type="button" onclick="afficherLocalStorage()"><a>afficher local storage</a></button>
@@ -38,6 +38,10 @@
         //EmptyLocalStorage();
     };
 
+    function CheckState() {
+        var chkBox = document.getElementById('FuzzyState');
+        console.log(chkBox.checked);
+    }
 
     function afficherLocalStorage() {
         local = localStorage.getItem('resumes_parsed');
@@ -54,7 +58,8 @@
         var fileInput = document.querySelector('input[type="file"]')
         var formdata = new FormData();
         formdata.append("files[]", fileInput.files[0]);
-        formdata.append("fuzzy", "False");
+        var chkBox = document.getElementById('FuzzyState');
+        formdata.append("fuzzy", chkBox.checked.toString());
 
         var requestOptions = {
             method: 'POST',
@@ -67,6 +72,7 @@
             .then(result => {
                 console.log(result);
                 localStorage.setItem("resumes_parsed", JSON.stringify(result));
+                window.location.href = "/Front/uploadPage/upload.html";
             })
             .catch(error => console.log('error', error));
 
