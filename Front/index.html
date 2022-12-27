@@ -21,8 +21,8 @@
     </div>
 
     <div class="footer">
-        <input type="file" name="upfile" />
-        <button class="validate" type="button" onclick="SendPost()" ><a>Valider</a></button>
+        <input type="file" name="upfile" multiple/>
+        <button class="validate" type="button" onclick="SendPost()"><a>Valider</a></button>
     </div>
     <div>
         <button class="validate" type="button" onclick="afficherLocalStorage()"><a>afficher local storage</a></button>
@@ -35,7 +35,7 @@
 <script>
 
     window.onload = function () {
-        //EmptyLocalStorage();
+
     };
 
     function CheckState() {
@@ -44,9 +44,8 @@
     }
 
     function afficherLocalStorage() {
-        local = localStorage.getItem('resumes_parsed');
-        localJson = JSON.stringify(local);
-        console.log(local);
+        localJson = JSON.parse(localStorage.getItem('resumes_parsed'));
+        console.log(localJson);
     }
 
     function EmptyLocalStorage() {
@@ -72,7 +71,8 @@
             .then(result => {
                 console.log(result);
                 localStorage.setItem("resumes_parsed", JSON.stringify(result));
-                window.location.href = "/Front/uploadPage/upload.html";
+                window.open("/Front/uploadPage/upload.html", '_blank');
+
             })
             .catch(error => console.log('error', error));
 
