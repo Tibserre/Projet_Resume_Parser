@@ -90,9 +90,9 @@ def validateCV(files):
  
  #
 
-def read_resumes(files):
+def read_resumes(files, fuzzy):
     
-    fuzzy = request.form.get('fuzzy') #get la valeur du param fuzzy
+    
     allResumes = {}
 
     for file in files :
@@ -137,6 +137,7 @@ def getResumeParser():
 def resumeParser():
     files = []
     files= request.files.getlist('files[]')
+    fuzzy = request.form.get('fuzzy') #get la valeur du param fuzzy
     responseJson = {}
     
     
@@ -147,7 +148,8 @@ def resumeParser():
     else :
         if uploadCV(files)==True:
 
-            t = Thread(target=parsingFiles,args=(files))
+            t = Thread(target=parsingFiles,args=(files,fuzzy,))
+           
             t.start()
             rep="Files uploaded"
             responseJson["reponse"]=rep
@@ -157,7 +159,7 @@ def resumeParser():
             responseJson["reponse"]=rep
             return responseJson 
             
-def parsingFiles(files):
+def parsingFiles(files,fuzzy):
     global result
 
     with lock:
@@ -166,15 +168,9 @@ def parsingFiles(files):
         responseJson["reponse"]=rep
         result = responseJson
     with lock:
-        JsonExtre = read_resumes(files)
-        rep="normalement ça a marché"
-        responseJson["reponse"]=rep
+        JsonExtre = read_resumes(files, fuzzy)
+        responseJson["reponse"]=JsonExtre
         result = responseJson
-
-    
-
-    with lock:
-        result =  JsonExtre
         
 
 
