@@ -2,6 +2,7 @@ from flask import Flask, json, request, jsonify
 from flask_cors import CORS
 import os
 import urllib.request
+from threading import Thread, Lock
 
 from werkzeug.utils import secure_filename
 from resumeparserFolder import scriptMain
@@ -124,34 +125,58 @@ def read_resumes(files):
             #
             # Post peut retourner un identifiant par ex ! lié au get 
 
+result = None
+lock = Lock()
+
+@app.route('/resume-parser', methods=['GET'])
+def getResumeParser():
+    with lock:
+        return result
+
 @app.route('/resume-parser', methods=['POST'])   
 def resumeParser():
     files = []
     files= request.files.getlist('files[]')
     responseJson = {}
-
+    
+    
     if 'files[]' not in request.files:
         rep="Aucun fichier"
         responseJson["reponse"]=rep
         return responseJson
     else :
         if uploadCV(files)==True:
-            
-            JsonExtre = read_resumes(files)
-            
-            if JsonExtre == None :
-                rep="VidePtn"
-                responseJson["reponse"]=rep
-                return responseJson
-            else :
-                return JsonExtre
 
-            
+            t = Thread(target=parsingFiles,args=(files))
+            t.start()
+            rep="Files uploaded"
+            responseJson["reponse"]=rep
+            return responseJson
         else :
             rep="not uploaded"
             responseJson["reponse"]=rep
             return responseJson 
             
+def parsingFiles(files):
+    global result
+
+    with lock:
+        responseJson = {}
+        rep="Travail en cours..."
+        responseJson["reponse"]=rep
+        result = responseJson
+    with lock:
+        JsonExtre = read_resumes(files)
+        rep="normalement ça a marché"
+        responseJson["reponse"]=rep
+        result = responseJson
+
+    
+
+    with lock:
+        result =  JsonExtre
+        
+
 
 
 if __name__ == '__main__':
