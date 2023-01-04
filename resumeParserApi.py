@@ -6,7 +6,6 @@ import urllib.request
 from werkzeug.utils import secure_filename
 from resumeparserFolder import scriptMain
 from resumeparserFolder.resumeparse import resumeparse
-from jsonmerge import merge
 
 app = Flask(__name__)
 CORS(app)
