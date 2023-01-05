@@ -113,7 +113,7 @@ document.querySelectorAll(".drop-zone__input").forEach((inputElement) => {
           body: formdata,
           redirect: 'follow'
       };
-      event.preventDefault();
+
       fetch("http://127.0.0.1:2000/resume-parser?files[]=", requestOptions)
           .then(response => response.json())
           .then(result => {
