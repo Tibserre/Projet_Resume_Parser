@@ -1,4 +1,6 @@
 from flask import Flask, json, request, jsonify
+
+#Il peut être necessaire de décommenter import CORS et CORS(app) plus bas pour éviter les soucis de CORE policy 
 #from flask_cors import CORS
 import os
 import urllib.request
@@ -17,7 +19,9 @@ app.secret_key = "caircocoders-ednalan"
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
- 
+
+
+#définition des extensions acceptées par le resume parser
 ALLOWED_EXTENSIONS = set(['docx', 'pdf' ])
  
 def allowed_file(filename):
@@ -29,9 +33,8 @@ def main():
  
 
 
-
+# fonction permettant d'uploader les CV pour leur traitement, ce dans le dossier uploads
 def uploadCV(files):
- 
 
     files = request.files.getlist('files[]')
     
@@ -49,16 +52,6 @@ def uploadCV(files):
 
 
 
-def checkExt():
-    if 'files[]' not in request.files:
-        resp = jsonify({'message' : 'No file part in the request'})
-        resp.status_code = 400
-        return resp
-    else :
-        resp = jsonify({'message' : 'One or more files in the request'})
-        resp.status_code = 201
-        return resp
-
 def validateCV(files):
     errors = {}
     success = False
@@ -68,7 +61,7 @@ def validateCV(files):
         resp.status_code = 400
         return resp
 
-    if uploadCV(files) :
+    if uploadCV(files) : #si l'upload a retourné true
                 success = True
     else:
                 errors ['message']  = 'File type is not allowed'
@@ -88,11 +81,11 @@ def validateCV(files):
             return resp
     
  
- #
-
+ 
+#fonction longue a l'éxecution, on récupère le fichier uploadé, et on le fait lire au résume parser 
+# si on a activé la fonction fuzzy, alors on compare le résultat obtenu au référentiel de sopra
 def read_resumes(files, fuzzy):
-    
-    
+
     allResumes = {}
 
     for file in files :
@@ -117,16 +110,9 @@ def read_resumes(files, fuzzy):
 
     return allResumes
     
-            
-            #Que dict mais a la fin dict to json !
-            # envoyer ici les fichiers pour les templates 
 
-            #séparer en POST et GET 
-            #
-            # Post peut retourner un identifiant par ex ! lié au get 
-
-result = None
-lock = Lock()
+result = None #initialisation d'une variable globale, cette variable contient le résultat du parsing des CV
+lock = Lock() #le lock permet d'éviter certains soucis lors de l'utilisation du multi thread
 
 @app.route('/resume-parser', methods=['GET'])
 def getResumeParser():
