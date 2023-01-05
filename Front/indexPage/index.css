@@ -1,0 +1,177 @@
+.header {
+    font-family: "Quicksand", sans-serif;
+    font-size: 1.6em;
+    display: flex;
+    margin-left: 1em;
+}
+
+.middle {
+    display: block
+}
+
+.footer {
+    display: block
+}
+
+.scd-middle {
+  display: flex;
+    margin-left: 15em;
+    align-items: center;
+}
+
+.a{
+  display: inline-block;
+  margin-right: 1em;
+}
+
+.b {
+  display: inline-block;
+  font-family: "Quicksand", sans-serif;
+  font-size: 1.2em;
+}
+
+.validate {
+  float: right;
+  background-color: #cccccc;
+  color: #ffffff;
+  font-size: 1em;
+  padding: 1em;
+  border: none;
+  border-radius: 4px;
+  margin-right: 2em;
+  margin-bottom: 2em;
+}
+
+input[type="file"] {
+  background-color: #cccccc;
+  color: #ffffff;
+  color: #ffffff;
+  font-size: 1em;
+  padding: 1em;
+  border: none;
+  border-radius: 4px;
+  margin-left: 2em;
+}
+
+
+
+
+
+
+/* The switch - the box around the slider */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+  }
+  
+  /* Hide default HTML checkbox */
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  /* Slider */
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  input:checked + .slider {
+    background-color: #21f352;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px #21f352;
+  }
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+  }
+  
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  }
+/* End Switch*/
+
+
+  
+/* Partie pour la Drag and Drop zone*/
+
+  .drop-zone {
+    height:24em;
+    font-size:1.5em;  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border:2px dashed #999;
+    border-radius: 5px;
+    overflow: hidden;
+    cursor: pointer;
+   font-family: "Quicksand", sans-serif;
+   color: #cccccc;
+   margin-left: 10em;
+   margin-right: 10em;
+}
+
+.drop-zone--over {
+  border-style: solid;
+}
+
+.drop-zone__input {
+  display: none;
+}
+
+.drop-zone__thumb {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #cccccc;
+  background-size: cover;
+  position: relative;
+}
+
+.drop-zone__thumb::after {
+  content: attr(data-label);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 5px 0;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.75);
+  font-size: 14px;
+  text-align: center;
+}
+
+/* Fin de la partie pour la Drag and Drop zone */

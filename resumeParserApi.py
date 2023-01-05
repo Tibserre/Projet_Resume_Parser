@@ -1,5 +1,5 @@
 from flask import Flask, json, request, jsonify
-from flask_cors import CORS
+#from flask_cors import CORS
 import os
 import urllib.request
 from threading import Thread, Lock
@@ -9,7 +9,7 @@ from resumeparserFolder import scriptMain
 from resumeparserFolder.resumeparse import resumeparse
 
 app = Flask(__name__)
-CORS(app)
+#CORS(app)
 
  
 app.secret_key = "caircocoders-ednalan"

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Gestion CV Sopra Steria</title>
+    <link rel="stylesheet" href="./index.css">
+    <link rel="shortcut icon" href="sopra.png">
+
+<body>
+
+    <div class="header">
+        <h3>Bienvenue sur l'IHM de Gestion de CV Sopra Steria</h3>
+    </div>
+
+
+    <div class container>
+
+    <div class="middle">
+        <div class="drop-zone">
+            <span class="drop-zone__prompt">Veuillez glisser-déposer votre fichier ici</span>
+            <input type="file" name="myFile" class="drop-zone__input">
+          </div>
+    </div>
+
+    <div class="scd-middle">
+            <div class="a"><label class="switch">
+            <input type="checkbox" id="FuzzyState" onclick="CheckState()">
+            <span class="slider round"></span>
+            </label></div>
+            <div class="b"><p> Activer la fonction fuzzy wuzzy</p></div>
+    </div>
+
+</div>
+  
+
+    <div class="footer">
+        <input type="file" name="upfile" />
+        <button class="validate" type="button" onclick="SendPost()"><a>Valider</a></button>
+    </div>
+    <div>
+        <button class="validate" type="button" onclick="afficherLocalStorage()"><a>afficher local storage</a></button>
+        <button class="validate" type="button" onclick="EmptyLocalStorage()"><a>vider local storage</a></button>
+        <button class="validate" type="button" onclick="getResult()"><a>Get résultat</a></button>
+    </div>
+
+    <script src="index.js"></script>
+
+</body>
