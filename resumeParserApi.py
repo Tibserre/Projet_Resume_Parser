@@ -171,7 +171,15 @@ def parsingFiles(files,fuzzy):
         JsonExtre = read_resumes(files, fuzzy)
         responseJson["reponse"]=JsonExtre
         result = responseJson
+        deleteFilesUploaded(files)
+
         
+def deleteFilesUploaded(files):
+    for file in files : 
+        file_to_delete="uploads/"+str(file.filename)
+        file_to_delete_corr =file_to_delete.replace(" ", "_")
+        os.remove(file_to_delete_corr)
+    
 
 
 
