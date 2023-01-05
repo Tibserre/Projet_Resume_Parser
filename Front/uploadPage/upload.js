@@ -3,14 +3,6 @@ window.onload = function () {
     
 };
 
-function getResult(){
-    console.log("inside getResult");
-    fetch("http://127.0.0.1:2000/resume-parser")
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.error(error));
-    
-}
 
 function getDataFromAPI() {
     return fetch('http://127.0.0.1:2000/resume-parser', {
@@ -22,8 +14,8 @@ function getDataFromAPI() {
       .then(function(data) {
         var resultat = JSON.stringify(data);
         var resultatJSON = JSON.parse(resultat)
-        console.log(resultatJSON);
-        return resultatJSON;
+        console.log(resultatJSON.reponse);
+        return resultatJSON.reponse;
       })
   }
 
