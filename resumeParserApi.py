@@ -114,6 +114,8 @@ def read_resumes(files, fuzzy):
 result = None #initialisation d'une variable globale, cette variable contient le résultat du parsing des CV
 lock = Lock() #le lock permet d'éviter certains soucis lors de l'utilisation du multi thread
 
+
+#
 @app.route('/resume-parser', methods=['GET'])
 def getResumeParser():
     with lock:
