@@ -25,3 +25,26 @@
     font-size: 2rem;
     font-weight: 700;
 }
+
+body {
+    font-family: sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  h1, h2, h3 {
+    color: #333;
+  }
+  p {
+    margin: 0;
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  li {
+    margin: 10px 0;
+  }
+  img {
+    max-width: 100%;
+  }
