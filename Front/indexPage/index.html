@@ -18,26 +18,28 @@
 
     <div class container>
 
-    <div class="middle">
-        <div class="drop-zone">
-            <form class="drop-zone__prompt">Veuillez glisser-déposer votre CV ici</form>
-            <input type="file" name="myFile" class="drop-zone__input" multiple>
-          </div>
-    </div>
+        <div class="middle">
+            <div class="drop-zone">
+                <form class="drop-zone__prompt">Veuillez glisser-déposer votre CV ici</form>
+                <input type="file" name="myFile" class="drop-zone__input" multiple>
+            </div>
+        </div>
 
-    <div class="scd-middle">
+        <div class="scd-middle">
             <div class="a"><label class="switch">
-            <input type="checkbox" id="FuzzyState" onclick="CheckState()">
-            <span class="slider round"></span>
-            </label></div>
-            <div class="b"><p> Activer la fonction fuzzy wuzzy</p></div>
+                    <input type="checkbox" id="FuzzyState" onclick="CheckState()">
+                    <span class="slider round"></span>
+                </label></div>
+            <div class="b">
+                <p> Activer la fonction fuzzy wuzzy</p>
+            </div>
+        </div>
+
     </div>
 
-</div>
-  
 
     <div class="footer">
-        <input type="file" name="upfile" hidden/>
+        <input type="file" name="upfile" hidden />
         <button class="validate" type="button" onclick="SendPost()"><a>Valider</a></button>
     </div>
     <div>
