@@ -36,9 +36,6 @@ h3 {
   width: 100%
 }
 
-.footer {
-  display: block
-}
 
 .scd-middle {
   display: flex;
@@ -140,7 +137,20 @@ input:checked+.slider:before {
 /* Partie pour la Drag and Drop zone*/
 .SuperContainer{
   display: flex;
-  flex-direction: row-reverse;
+  flex-direction: reverse;
+  font-family: 'Ubuntu', sans-serif;
+}
+
+.Explications{
+  margin-top: 4%;
+  margin-left: 2%;
+  width: 30%;
+  font-size: 1.4rem;
+  font-weight: 300;
+}
+
+.TextBloc{
+  margin-bottom: 1rem;
 }
 
 .Buttons{
@@ -148,6 +158,8 @@ input:checked+.slider:before {
   flex-direction: column;
   width: 30%;
   margin-top: 2rem;
+
+  align-items: flex-start;
   display: none;
 }
 
@@ -155,7 +167,8 @@ input:checked+.slider:before {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
+  width: 110%;
+  
 }
 
 .drop-zone {
@@ -207,7 +220,7 @@ input:checked+.slider:before {
 
 /* Fin de la partie pour la Drag and Drop zone */
 
-button {
+.validate {
   --color: #0077ff;
   font-family: inherit;
   display: inline-block;
@@ -249,4 +262,9 @@ button:before {
 button:hover::before {
   top: -30px;
   left: -30px;
+}
+
+.debug{
+  font-size: 1rem;
+  margin: 1rem
 }
