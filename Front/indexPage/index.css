@@ -1,21 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
+
 body {
   display: block;
   margin: 0px;
 }
 
 .header {
-  font-family: "Quicksand", sans-serif;
+  font-family: 'Ubuntu', sans-serif;
+
   font-size: 1.6em;
-  display: block;
-  
-  height:7rem;
+  display: flex;
+  width: fit-content;
+  height: 5rem;
   padding-left: 2rem;
   background-color: #0B6E4F;
   color: #ffffff;
+  border-radius: 0px 42px 42px 0px;
+}
+
+.Title {
+  padding-right: 4rem;
+  display: flex;
+  align-items: center;
+
+}
+
+h3 {
+  font-weight: 500;
 }
 
 .middle {
-  display: block
+  display: flex;
+  justify-content: center;
+  width: 100%
 }
 
 .footer {
@@ -24,7 +42,6 @@ body {
 
 .scd-middle {
   display: flex;
-  margin-left: 10%;
   align-items: center;
 }
 
@@ -35,21 +52,11 @@ body {
 
 .b {
   display: inline-block;
-  font-family: "Quicksand", sans-serif;
+  font-family: 'Ubuntu', sans-serif;
+  font-weight: 400;
   font-size: 1.2em;
 }
 
-.validate {
-  float: right;
-  background-color: #cccccc;
-  color: #ffffff;
-  font-size: 1em;
-  padding: 1em;
-  border: none;
-  border-radius: 4px;
-  margin-right: 2em;
-  margin-bottom: 2em;
-}
 
 input[type="file"] {
   background-color: #cccccc;
@@ -104,11 +111,11 @@ input[type="file"] {
 }
 
 input:checked+.slider {
-  background-color: #21f352;
+  background-color: #0077ff;
 }
 
 input:focus+.slider {
-  box-shadow: 0 0 1px #21f352;
+  box-shadow: 0 0 1px #0077ff;
 }
 
 input:checked+.slider:before {
@@ -131,21 +138,40 @@ input:checked+.slider:before {
 
 
 /* Partie pour la Drag and Drop zone*/
+.SuperContainer{
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.Buttons{
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  margin-top: 2rem;
+  display: none;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
 
 .drop-zone {
+  width: 80%;
   height: 20em;
   font-size: 1.5em;
   display: flex;
   align-items: center;
   justify-content: center;
   border: 2px dashed #999;
-  border-radius: 5px;
+  border-radius: 50px;
   overflow: hidden;
   cursor: pointer;
-  font-family: "Quicksand", sans-serif;
-  color: #cccccc;
-  margin-left: 10%;
-  margin-right: 10%;
+  font-family: 'Ubuntu', sans-serif;
+  color: #999;
+  margin-top: 4%;
 }
 
 .drop-zone--over {
@@ -180,3 +206,47 @@ input:checked+.slider:before {
 }
 
 /* Fin de la partie pour la Drag and Drop zone */
+
+button {
+  --color: #0077ff;
+  font-family: inherit;
+  display: inline-block;
+  width: 6em;
+  height: 2.6em;
+  line-height: 2.5em;
+  overflow: hidden;
+  margin: 20px;
+  font-size: 17px;
+  z-index: 1;
+  color: var(--color);
+  border: 2px solid var(--color);
+  border-radius: 6px;
+  position: relative;
+  font-family: 'Ubuntu', sans-serif;
+}
+
+button::before {
+  position: absolute;
+  content: "";
+  background: var(--color);
+  width: 150px;
+  height: 200px;
+  z-index: -1;
+  border-radius: 50%;
+}
+
+button:hover {
+  color: white;
+}
+
+button:before {
+  top: 100%;
+  left: 100%;
+  -webkit-transition: .3s all;
+  transition: .3s all;
+}
+
+button:hover::before {
+  top: -30px;
+  left: -30px;
+}
