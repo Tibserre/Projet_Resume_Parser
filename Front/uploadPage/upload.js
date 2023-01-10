@@ -27,7 +27,10 @@ function parsingJSON(JSON) {
 
 
 
+function back(){
+  window.location.replace("/Front/indexPage/index.html");
 
+}
 
 // fonction pour afficher les données d'un objet ou d'un tableau
 function displayData(data) {
