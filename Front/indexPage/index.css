@@ -222,6 +222,7 @@ input:checked+.slider:before {
 
 .validate {
   --color: #0077ff;
+  cursor: pointer;
   font-family: inherit;
   display: inline-block;
   width: 6em;
