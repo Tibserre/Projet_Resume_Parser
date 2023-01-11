@@ -47,56 +47,11 @@ function displayList(list, title, elementId, maxColumn) {
 }
 
 
-// bouton pour afficher professionnal experiences
-let professionnalExpButton = document.getElementById("professionnal-experiences-button");
-professionnalExpButton.addEventListener("click", function () {
-  let listHtml = "";
-  listHtml += "<ul class='card-list'>";
-  for (let i = 0; i < professionnalExperiences.length; i++) {
-    listHtml += "<li>" + professionnalExperiences[i] + "</li>";
-  }
-  listHtml += "</ul>";
-  document.getElementById("professionnal-experiences-list").innerHTML = listHtml;
-});
 
 
 
 
-// fonction pour afficher les données d'un objet ou d'un tableau
-function displayData(data) {
-  // création de la structure HTML de base
-  const container = document.createElement('div');
 
-  // si l'objet est un tableau, on le parcourt et on affiche chaque élément
-  if (Array.isArray(data)) {
-    for (const element of data) {
-      container.appendChild(displayData(element));
-    }
-  }
-  // si l'objet est un objet, on parcourt ses propriétés et on les affiche
-  else if (typeof data === 'object') {
-    for (const key in data) {
-      // création de l'élément HTML pour la propriété
-      const property = document.createElement('div');
-      property.innerHTML = `<h3>${key}</h3>`;
-
-      // ajout de la valeur de la propriété à l'élément
-      property.appendChild(displayData(data[key]));
-
-      // ajout de la propriété à la structure HTML
-      container.appendChild(property);
-    }
-  }
-  // si l'objet est une chaîne de caractères, on l'affiche
-  else {
-    const element = document.createElement('p');
-    element.innerText = data;
-    container.appendChild(element);
-  }
-
-  // retour de la structure HTML
-  return container;
-}
 
 function ajoutJson(data) {
   //const jsonContainer = document.getElementById('json');
@@ -117,4 +72,20 @@ displayList(linkedinSkills, "Linkedin_skills", "linkedin_skills", 5);
 displayList(skills["competences fonctionnelles"], "competences fonctionnelles", "competences-fonctionnelles", 5);
 displayList(skills["competences techniques"], "competences techniques", "competences-techniques", 5);
 displayList(skills["langage"], "langage", "langage", 5);
+
+
+// bouton pour afficher professionnal experiences
+let professionnalExpButton = document.getElementById("professionnal-experiences-button");
+professionnalExpButton.addEventListener("click", function () {
+  let listHtml = "";
+  listHtml += "<ul class='card-list'>";
+  for (let i = 0; i < professionnalExperiences.length; i++) {
+    listHtml += "<li>" + professionnalExperiences[i] + "</li>";
+    console.log(professionnalExperiences[i])
+  }
+  listHtml += "</ul>";
+  document.getElementById("professionnal-experiences-list").innerHTML = listHtml;
+  let professionnalExpList = document.getElementById("professionnal-experiences-list");
+  professionnalExpList.classList.remove("hidden");
+});
 }

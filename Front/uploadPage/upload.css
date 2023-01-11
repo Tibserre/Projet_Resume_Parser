@@ -92,5 +92,9 @@ body {
 }
 
 #professionnal-experiences-list {
-    display: none;
+    
+}
+
+.hidden{
+  display: none;
 }
