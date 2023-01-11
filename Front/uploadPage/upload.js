@@ -54,6 +54,27 @@ function displayIfExist(data, fieldName, displayName, listId, maxItems) {
 }
 
 
+function displayIfExistAndCreateHTMLForLinkedInSkills(data, fieldName, displayName, listId, maxItems) {
+  if (data[fieldName]) {
+    let list = data[fieldName];
+
+    let skillsHTML = "";
+    skillsHTML += "<div class='card'>"
+    skillsHTML += "<div class='card-title'>" + displayName + "</div>"
+    skillsHTML += "<ul class='card-list'>";
+
+    for (let i = 0; i < list.length; i++) {
+      if (i % maxItems === 0 && i !== 0) {
+        skillsHTML += "</ul><ul class='card-list'>";
+      }
+      skillsHTML += "<li>" + list[i] + "</li>";
+    }
+    skillsHTML += "</ul>"
+    skillsHTML += "</div>"
+    document.getElementById(listId).innerHTML = skillsHTML;
+  }
+}
+
 
 
 
@@ -74,21 +95,15 @@ let skills = cvData["skills"];
 //appel des fonctions pour l'affichage des listes
 
 displayIfExist(cvData["formation"], "formation", "Formation", "formation", 5);
-displayIfExist(cvData["skills"], "Skills_applicatives", "Skills applicatives", "skills-applicatives", 5);
-displayIfExist(cvData["skills"], "Skills_methodo", "Skills méthodo", "skills-methodo", 5);
-displayIfExist(cvData["skills"], "Skills_metiers", "Skills métier", "skills-metiers", 5);
-displayIfExist(cvData["skills"], "Skills_outils", "Skills outils", "skills-outils", 5);
-displayIfExist(cvData["skills"], "Skills_techniques", "Skills techniques", "skills-techniques", 5);
-
-/*
-displayList(formation, "Formation", "formation", 5);
-displayList(linkedinSkills, "Linkedin_skills", "linkedin_skills", 5);
-displayList(skills["competences fonctionnelles"], "competences fonctionnelles", "competences-fonctionnelles", 5);
-displayList(skills["competences techniques"], "competences techniques", "competences-techniques", 5);
-displayList(skills["langage"], "langage", "langage", 5);
-   */
-
-
+displayIfExist(cvData["skills"], "Skills_applicatives", "Applicatives", "skills-applicatives", 5);
+displayIfExist(cvData["skills"], "Skills_methodo", "Méthodologie", "skills-methodo", 5);
+displayIfExist(cvData["skills"], "Skills_metiers", "Métier", "skills-metiers", 5);
+displayIfExist(cvData["skills"], "Skills_outils", "Outils", "skills-outils", 5);
+displayIfExist(cvData["skills"], "Skills_techniques", "Techniques", "skills-techniques", 5);
+displayIfExist(cvData["skills"], "competences fonctionnelles", "Fonctionnelles", "competences-fonctionnelles", 5);
+displayIfExist(cvData["skills"], "competences techniques", "Techniques", "competences-techniques", 5);``
+displayIfExist(cvData["skills"], "langage", "Langages", "langage", 5);
+displayIfExistAndCreateHTMLForLinkedInSkills(cvData, "linkedin_skills", "Compétences LinkedIn", "linkedin_skills", 5);
 
  
 
@@ -121,3 +136,5 @@ professionnalExpButton.addEventListener("click", function () {
   professionnalExpList.classList.remove("hidden");
 });
 }
+
+
