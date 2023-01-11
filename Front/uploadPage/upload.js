@@ -46,7 +46,12 @@ function displayList(list, title, elementId, maxColumn) {
   document.getElementById(elementId).innerHTML = listHtml;
 }
 
-
+function displayIfExist(data, fieldName, displayName, listId, maxItems) {
+  if (data[fieldName]) {
+    let list = data[fieldName];
+    displayList(list, displayName, listId, maxItems);
+  }
+}
 
 
 
@@ -67,12 +72,26 @@ let professionnalExperiences = cvData["professionnal_experiences"]["experiences"
 let skills = cvData["skills"];
 
 //appel des fonctions pour l'affichage des listes
+
+displayIfExist(cvData["formation"], "formation", "Formation", "formation", 5);
+displayIfExist(cvData["professionnal_experiences"], "experiences", "Expériences professionnelles", "professional-experiences", 5);
+displayIfExist(cvData["skills"], "Skills_applicatives", "Skills applicatives", "skills-applicatives", 5);
+displayIfExist(cvData["skills"], "Skills_methodo", "Skills méthodo", "skills-methodo", 5);
+displayIfExist(cvData["skills"], "Skills_metiers", "Skills métier", "skills-metiers", 5);
+displayIfExist(cvData["skills"], "Skills_outils", "Skills outils", "skills-outils", 5);
+displayIfExist(cvData["skills"], "Skills_techniques", "Skills techniques", "skills-techniques", 5);
+
+/*
 displayList(formation, "Formation", "formation", 5);
 displayList(linkedinSkills, "Linkedin_skills", "linkedin_skills", 5);
 displayList(skills["competences fonctionnelles"], "competences fonctionnelles", "competences-fonctionnelles", 5);
 displayList(skills["competences techniques"], "competences techniques", "competences-techniques", 5);
 displayList(skills["langage"], "langage", "langage", 5);
+   */
 
+
+
+ 
 
 // bouton pour afficher professionnal experiences
 let professionnalExpButton = document.getElementById("professionnal-experiences-button");
