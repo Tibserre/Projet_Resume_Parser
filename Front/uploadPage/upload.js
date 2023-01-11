@@ -54,13 +54,13 @@ function displayList(list, title, elementId, maxColumn) {
 
 
 function ajoutJson(data) {
-  //const jsonContainer = document.getElementById('json');
-
-  // ajout du JSON à l'élément
-  //jsonContainer.appendChild(displayData(data));
+  function getCVName(data) {
+    let cvName = Object.keys(data)[0]; // Récupère la première clé du JSON (ici "CV_-_TGU.docx")
+    return cvName; // Retourne la partie avant le point (ici "CV_-_TGU")
+  }
 
 // Récupération des données à partir de la variable "data"
-let cvData = data["CV_-_TGU.docx"];
+let cvData = data[getCVName(data)];
 let formation = cvData["formation"]["formation"];
 let linkedinSkills = cvData["linkedin_skills"];
 let professionnalExperiences = cvData["professionnal_experiences"]["experiences"];
@@ -77,15 +77,29 @@ displayList(skills["langage"], "langage", "langage", 5);
 // bouton pour afficher professionnal experiences
 let professionnalExpButton = document.getElementById("professionnal-experiences-button");
 professionnalExpButton.addEventListener("click", function () {
-  let listHtml = "";
-  listHtml += "<ul class='card-list'>";
-  for (let i = 0; i < professionnalExperiences.length; i++) {
-    listHtml += "<li>" + professionnalExperiences[i] + "</li>";
-    console.log(professionnalExperiences[i])
-  }
-  listHtml += "</ul>";
-  document.getElementById("professionnal-experiences-list").innerHTML = listHtml;
   let professionnalExpList = document.getElementById("professionnal-experiences-list");
+  professionnalExpList.innerHTML = ""; // On vide le contenu de la liste avant de l'afficher
+
+  for (let i = 0; i < professionnalExperiences.length; i++) {
+    let experience = professionnalExperiences[i];
+
+    let experienceContainer = document.createElement("div"); //Crée un élément div pour chaque expérience
+    experienceContainer.classList.add("experience-container");
+    professionnalExpList.appendChild(experienceContainer);
+    
+
+
+    let experienceTitle = document.createElement("h3"); // Crée un élément h3 pour le titre de l'expérience
+    experienceTitle.classList.add("experience-title");
+    experienceTitle.innerHTML = experience;
+    experienceContainer.appendChild(experienceTitle);
+/*
+    let experienceDetail = document.createElement("div"); // Crée un élément div pour les détails de l'expérience
+    experienceDetail.classList.add("experience-detail");
+    experienceDetail.innerHTML = experience;
+    experienceContainer.appendChild(experienceDetail);
+    */
+  }
   professionnalExpList.classList.remove("hidden");
 });
 }

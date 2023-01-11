@@ -75,8 +75,6 @@ body {
 
 .card-list {
     display: flex;
-    flex-wrap: wrap;
-    margin-bottom: 10px;
 }
 
 .card-list li {
@@ -87,14 +85,33 @@ body {
 }
 
 .professional-experiences-container {
-    text-align: center;
-    margin-top: 20px;
+  margin-top: 20px;
+}
+
+.experience-container {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.experience-title {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.experience-detail {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 10px;
 }
 
 #professionnal-experiences-list {
-    
+    display: flex;
+    flex-direction: column;
 }
 
 .hidden{
   display: none;
 }
+
+
