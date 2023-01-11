@@ -74,7 +74,6 @@ let skills = cvData["skills"];
 //appel des fonctions pour l'affichage des listes
 
 displayIfExist(cvData["formation"], "formation", "Formation", "formation", 5);
-displayIfExist(cvData["professionnal_experiences"], "experiences", "Expériences professionnelles", "professional-experiences", 5);
 displayIfExist(cvData["skills"], "Skills_applicatives", "Skills applicatives", "skills-applicatives", 5);
 displayIfExist(cvData["skills"], "Skills_methodo", "Skills méthodo", "skills-methodo", 5);
 displayIfExist(cvData["skills"], "Skills_metiers", "Skills métier", "skills-metiers", 5);
