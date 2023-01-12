@@ -106,12 +106,9 @@ body {
 }
 
 #professionnal-experiences-list {
-    display: flex;
+  
     flex-direction: column;
 }
 
-.hidden{
-  display: none;
-}
 
 
