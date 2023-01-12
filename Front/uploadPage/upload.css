@@ -10,8 +10,8 @@
     width: fit-content;
     height: fit-content;
     color: rgb(47, 47, 47);
+    cursor: pointer;
 }
-
 
 
 .containerTitle{
@@ -55,6 +55,7 @@ body {
   .main-container {
     width: 80%;
     margin: 0 auto;
+    margin-bottom: 2rem;
 }
 
 .card {
@@ -106,12 +107,9 @@ body {
 }
 
 #professionnal-experiences-list {
-    display: flex;
+  
     flex-direction: column;
 }
 
-.hidden{
-  display: none;
-}
 
 
