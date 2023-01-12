@@ -29,45 +29,112 @@ function parsingJSON(JSON) {
 
 
 
-// fonction pour afficher les données d'un objet ou d'un tableau
-function displayData(data) {
-  // création de la structure HTML de base
-  const container = document.createElement('div');
-
-  // si l'objet est un tableau, on le parcourt et on affiche chaque élément
-  if (Array.isArray(data)) {
-    for (const element of data) {
-      container.appendChild(displayData(element));
+// fonction pour afficher les lists
+function displayList(list, title, elementId, maxColumn) {
+  let listHtml = "";
+  listHtml += "<div class='card'>"
+  listHtml += "<div class='card-title'>" + title + "</div>"
+  listHtml += "<ul class='card-list'>";
+  for (let i = 0; i < list.length; i++) {
+    if (i % maxColumn === 0 && i !== 0) {
+      listHtml += "</ul><ul class='card-list'>";
     }
+    listHtml += "<li>" + list[i] + "</li>";
   }
-  // si l'objet est un objet, on parcourt ses propriétés et on les affiche
-  else if (typeof data === 'object') {
-    for (const key in data) {
-      // création de l'élément HTML pour la propriété
-      const property = document.createElement('div');
-      property.innerHTML = `<h3>${key}</h3>`;
-
-      // ajout de la valeur de la propriété à l'élément
-      property.appendChild(displayData(data[key]));
-
-      // ajout de la propriété à la structure HTML
-      container.appendChild(property);
-    }
-  }
-  // si l'objet est une chaîne de caractères, on l'affiche
-  else {
-    const element = document.createElement('p');
-    element.innerText = data;
-    container.appendChild(element);
-  }
-
-  // retour de la structure HTML
-  return container;
+  listHtml += "</ul>"
+  listHtml += "</div>"
+  document.getElementById(elementId).innerHTML = listHtml;
 }
+
+function displayIfExist(data, fieldName, displayName, listId, maxItems) {
+  if (data[fieldName]) {
+    let list = data[fieldName];
+    displayList(list, displayName, listId, maxItems);
+  }
+}
+
+
+function displayIfExistAndCreateHTMLForLinkedInSkills(data, fieldName, displayName, listId, maxItems) {
+  if (data[fieldName]) {
+    let list = data[fieldName];
+
+    let skillsHTML = "";
+    skillsHTML += "<div class='card'>"
+    skillsHTML += "<div class='card-title'>" + displayName + "</div>"
+    skillsHTML += "<ul class='card-list'>";
+
+    for (let i = 0; i < list.length; i++) {
+      if (i % maxItems === 0 && i !== 0) {
+        skillsHTML += "</ul><ul class='card-list'>";
+      }
+      skillsHTML += "<li>" + list[i] + "</li>";
+    }
+    skillsHTML += "</ul>"
+    skillsHTML += "</div>"
+    document.getElementById(listId).innerHTML = skillsHTML;
+  }
+}
+
+
+
+
 
 function ajoutJson(data) {
-  const jsonContainer = document.getElementById('json');
+  function getCVName(data) {
+    let cvName = Object.keys(data)[0]; // Récupère la première clé du JSON (ici "CV_-_TGU.docx")
+    return cvName; // Retourne la partie avant le point (ici "CV_-_TGU")
+  }
 
-  // ajout du JSON à l'élément
-  jsonContainer.appendChild(displayData(data));
+// Récupération des données à partir de la variable "data"
+let cvData = data[getCVName(data)];
+let formation = cvData["formation"]["formation"];
+let linkedinSkills = cvData["linkedin_skills"];
+let professionnalExperiences = cvData["professionnal_experiences"]["experiences"];
+let skills = cvData["skills"];
+
+//appel des fonctions pour l'affichage des listes
+
+displayIfExist(cvData["formation"], "formation", "Formation", "formation", 5);
+displayIfExist(cvData["skills"], "Skills_applicatives", "Applicatives", "skills-applicatives", 5);
+displayIfExist(cvData["skills"], "Skills_methodo", "Méthodologie", "skills-methodo", 5);
+displayIfExist(cvData["skills"], "Skills_metiers", "Métier", "skills-metiers", 5);
+displayIfExist(cvData["skills"], "Skills_outils", "Outils", "skills-outils", 5);
+displayIfExist(cvData["skills"], "Skills_techniques", "Techniques", "skills-techniques", 5);
+displayIfExist(cvData["skills"], "competences fonctionnelles", "Fonctionnelles", "competences-fonctionnelles", 5);
+displayIfExist(cvData["skills"], "competences techniques", "Techniques", "competences-techniques", 5);``
+displayIfExist(cvData["skills"], "langage", "Langages", "langage", 5);
+displayIfExistAndCreateHTMLForLinkedInSkills(cvData, "linkedin_skills", "Compétences LinkedIn", "linkedin_skills", 5);
+
+ 
+
+// bouton pour afficher professionnal experiences
+let professionnalExpButton = document.getElementById("professionnal-experiences-button");
+professionnalExpButton.addEventListener("click", function () {
+  let professionnalExpList = document.getElementById("professionnal-experiences-list");
+  professionnalExpList.innerHTML = ""; // On vide le contenu de la liste avant de l'afficher
+
+  for (let i = 0; i < professionnalExperiences.length; i++) {
+    let experience = professionnalExperiences[i];
+
+    let experienceContainer = document.createElement("div"); //Crée un élément div pour chaque expérience
+    experienceContainer.classList.add("experience-container");
+    professionnalExpList.appendChild(experienceContainer);
+    
+
+
+    let experienceTitle = document.createElement("h3"); // Crée un élément h3 pour le titre de l'expérience
+    experienceTitle.classList.add("experience-title");
+    experienceTitle.innerHTML = experience;
+    experienceContainer.appendChild(experienceTitle);
+/*
+    let experienceDetail = document.createElement("div"); // Crée un élément div pour les détails de l'expérience
+    experienceDetail.classList.add("experience-detail");
+    experienceDetail.innerHTML = experience;
+    experienceContainer.appendChild(experienceDetail);
+    */
+  }
+  professionnalExpList.classList.remove("hidden");
+});
 }
+
+
