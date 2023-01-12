@@ -27,7 +27,9 @@ function parsingJSON(JSON) {
 
 
 
-
+function back(){
+  window.location.href = "/Front/indexPage/index.html";
+}
 
 // fonction pour afficher les lists
 function displayList(list, title, elementId, maxColumn) {
@@ -103,7 +105,7 @@ function ajoutJson(data) {
   displayIfExist(cvData["skills"], "competences fonctionnelles", "Fonctionnelles", "competences-fonctionnelles", 5);
   displayIfExist(cvData["skills"], "competences techniques", "Techniques", "competences-techniques", 5); ``
   displayIfExist(cvData["skills"], "langage", "Langages", "langage", 5);
-  displayIfExistAndCreateHTMLForLinkedInSkills(cvData, "linkedin_skills", "Compétences LinkedIn", "linkedin_skills", 5);
+  displayIfExistAndCreateHTMLForLinkedInSkills(cvData, "linkedin_skills", "Issues de LinkedIn", "linkedin_skills", 5);
 
   CreateList(cvData)
 
