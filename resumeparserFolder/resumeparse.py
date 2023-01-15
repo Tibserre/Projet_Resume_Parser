@@ -1,14 +1,3 @@
-# %%writefile /content/resume_parser/resume_parser/resumeparse.py
-# !apt-get install python-dev libxml2-dev libxslt1-dev antiword unrtf poppler-resumeparse pstotext tesseract-ocr
-# !sudo apt-get install libenchant1c2a
-
-
-# !pip install tika
-# !pip install docx2txt
-# !pip install phonenumbers
-# !pip install pyenchant
-# !pip install stemming
-
 from __future__ import division
 
 import re
@@ -24,7 +13,17 @@ import json
 
 import unidecode
 
+'''
+    Resumeparse class
+    Computes the resume to give a dictionary regrouping the different
+    sections from the resume and their content
+'''
 class resumeparse(object):
+    '''
+        List of the different headers that will be recognized by the resumeparser
+        to make sections and subsections
+        We have a french support of headers into each topic
+    '''
     objective = (
         'career goal',
         'objective',
@@ -221,30 +220,16 @@ class resumeparse(object):
         'projets personnels',
     )
 
+    """
+        A utility function to convert a Microsoft docx files to raw text.
+
+        This code is largely borrowed from existing solutions, and does not match the style of the rest of this repo.
+        :param docx_file: docx file with gets uploaded by the user
+        :type docx_file: InMemoryUploadedFile
+        :return: The text contents of the docx file
+        :rtype: str
+    """
     def convert_docx_to_txt(docx_file, docx_parser):
-        """
-            A utility function to convert a Microsoft docx files to raw text.
-
-            This code is largely borrowed from existing solutions, and does not match the style of the rest of this repo.
-            :param docx_file: docx file with gets uploaded by the user
-            :type docx_file: InMemoryUploadedFile
-            :return: The text contents of the docx file
-            :rtype: str
-        """
-        # try:
-        #     text = docx2txt.process(docx_file)  # Extract text from docx file
-        #     clean_text = text.replace("\r", "\n").replace("\t", " ")  # Normalize text blob
-        #     resume_lines = clean_text.splitlines()  # Split text blob into individual lines
-        #     resume_lines = [re.sub('\s+', ' ', line.strip()) for line in resume_lines if line.strip()]  # Remove empty strings and whitespaces
-
-        #     return resume_lines
-        # except KeyError:
-        #     text = textract.process(docx_file)
-        #     text = text.decode("utf-8")
-        #     clean_text = text.replace("\r", "\n").replace("\t", " ")  # Normalize text blob
-        #     resume_lines = clean_text.splitlines()  # Split text blob into individual lines
-        #     resume_lines = [re.sub('\s+', ' ', line.strip()) for line in resume_lines if line.strip()]  # Remove empty strings and whitespaces
-        #     return resume_lines
         try:
             if docx_parser == "tika":
                 text = parser.from_file(docx_file, service='text')['content']
@@ -272,8 +257,7 @@ class resumeparse(object):
             logging.error('Error in docx file:: ' + str(e))
             return [], " "
 
-    def convert_pdf_to_txt(pdf_file):
-        """
+    """
         A utility function to convert a machine-readable PDF to raw text.
 
         This code is largely borrowed from existing solutions, and does not match the style of the rest of this repo.
@@ -281,15 +265,8 @@ class resumeparse(object):
         :type input_pdf_path: str
         :return: The text contents of the pdf
         :rtype: str
-        """
-        # try:
-        # PDFMiner boilerplate
-        # pdf = pdfplumber.open(pdf_file)
-        # full_string= ""
-        # for page in pdf.pages:
-        #   full_string += page.extract_text() + "\n"
-        # pdf.close()
-
+    """
+    def convert_pdf_to_txt(pdf_file):
         try:
             raw_text = parser.from_file(pdf_file, service='text')['content']
         except RuntimeError as e:
@@ -326,30 +303,34 @@ class resumeparse(object):
             logging.error('Error in docx file:: ' + str(e))
             return [], " "
 
+    '''
+        Function that will find the indices of the lines matching our headers lists
+    '''
     def find_segment_indices(string_to_search, resume_segments, resume_indices):
         for i, line in enumerate(string_to_search):  # i itérateur, line : prend comme valeur chaque ligne du CV
 
-            # Si la premiere lettre de la ligne est une minuscule, on sait que cette ligne est la
-            # suite de la ligne précédente, donc on itère
+            # If the first letter of the line is lowercase, it belongs to the same sentence as the one before so we can
+            # iterate
             if line[0].islower():
                 continue
 
-            # On met la ligne en minuscule
+            # We lowercase the line
             header = line.lower()
             header_rm_emphases = resumeparse.remove_emphases(header)
 
-            # L'objectif de cette méthode est de récupérer l'indice de la ligne de chaque en-tête, ce qui permet de
-            # délimiter les zones du CV
+            '''
+                We'll look for the indices of the lines matching our headers lists which will allow us to delimit the 
+                resume sections
+            '''
 
-            # On prend chaque élément de la liste des objectifs de resumeparse et on le compare au début de notre ligne
-            # contenue dans header
+            # Each element of the objective list of headers is compared to the beginning of our line contained in header
             if [o for o in resumeparse.objective if header.startswith(o)]:
-                # Resume_segments est un dictionnaire en 2 dimensions, on verifie que la case du dictionnaire soit pleine
+                # Resume_segments is a dictionary in 2 dimensions, we first check if the cell has a value
                 try:
                     resume_segments['objective'][header]
                 except:
-                    # Notre case de dictionnaire est vide, on ajoute l'indice correspondant à notre ligne d'en-tête
-                    # Le dictionnaire va contenir la position de son header correspondant
+                    # Our cell is empty, we add the line index corresponding the header
+                    # The dictionary contains the line index of its corresponding header
                     resume_indices.append(i)
                     header = [o for o in resumeparse.objective if header.startswith(o)][0]
                     resume_segments['objective'][header] = i
@@ -395,10 +376,10 @@ class resumeparse(object):
                     resume_segments['accomplishments'][header] = i
 
     def slice_segments(string_to_search, resume_segments, resume_indices):
-        # Il considere que tout ce qui est avant le premier indice de header contient les informations relatives à la
-        # personne
-        # Ex : Si votre premier header est votre formation et qu'elle commence à la ligne 3, resume_indices[0]=3 et il
-        # considere que les informations de contact sont stockées dans les lignes 0 à 2
+        # We consider that everything which is before the first recognized header line index contains contact
+        # information
+        # Ex : If your first header is your education and that it begins on line 3 then resume_indices[0]=3 and it will
+        # consider that contact info are within the line 0 to 2
         resume_segments['contact_info'] = string_to_search[:resume_indices[0]]
 
         # resume_segments ={
@@ -406,9 +387,9 @@ class resumeparse(object):
         #                              "military experience" : "20"},
         #    "a" : {"b" : "c"}
         # }
-        # a = section     : définit dans segment()
-        # b = sub_section : header reconnu dans le CV lu
-        # c = start_idx   : indice de la ligne du header
+        # a = section     : defined in segment()
+        # b = sub_section : header recognized in the resume
+        # c = start_idx   : line index of the header
         # {b + c} = value
         for section, value in resume_segments.items():
             if section == 'contact_info':
@@ -416,13 +397,13 @@ class resumeparse(object):
 
 
             for sub_section, start_idx in value.items():
-                # On initialise l'indice de fin de section à la fin de notre CV
+                # Initializing the end of section index at the end of our resume
                 end_idx = len(string_to_search)
-                # On regarde nos indices des headers pour faire la délimitation de nos sous-sections
+                # We can delimit our sub-sections thanks to the indexes from resume_indices
                 if (resume_indices.index(start_idx) + 1) != len(resume_indices):
                     end_idx = resume_indices[resume_indices.index(start_idx) + 1]
 
-                # On remplace nos indices délimitant nos sous-sections par les string contenus dans celles-ci
+                # Replacing our index by the strings
                 resume_segments[section][sub_section] = string_to_search[start_idx:end_idx]
 
 
@@ -432,19 +413,18 @@ class resumeparse(object):
             'work_and_employment': {},
             'education_and_training': {},
             'skills': {},
-            'linkedin_skills': {}, #skills extraits du fichier LINKEDIN_SKILLS_ORIGINAL.txt
+            'linkedin_skills': {}, #skills extracted from LINKEDIN_SKILLS_ORIGINAL.txt
             'accomplishments': {},
             'misc': {}
         }
 
-        # Liste qui contient les indices de position des segments
+        # List containing segment line indexes
         resume_indices = []
 
-        # On determine la position de chaque header
+        # Determining header position
         resumeparse.find_segment_indices(string_to_search, resume_segments, resume_indices)
 
-        # On détermine la place de contact info et on remplace les indices de toutes les sous-sections par leurs valeurs
-        # en string
+        # Determining the contact info segment
         if len(resume_indices) != 0:
             resumeparse.slice_segments(string_to_search, resume_segments, resume_indices)
         else:
@@ -452,12 +432,13 @@ class resumeparse(object):
 
         return resume_segments
 
-    def read_file(file, docx_parser="tika"):
-        """
+    """
+        Function read file which returns the full dictionary with the sorted information of the resume and the skills 
+        recognized from Linkedin skills file
         file : Give path of resume file
         docx_parser : Enter docx2txt or tika, by default is tika
-        """
-        # file = "/content/Asst Manager Trust Administration.docx"
+    """
+    def read_file(file, docx_parser="tika"):
         file = os.path.join(file)
         if file.endswith('docx') or file.endswith('doc'):
             if file.endswith('doc') and docx_parser == "docx2txt":
@@ -473,6 +454,7 @@ class resumeparse(object):
         else:
             resume_lines = None
 
+        #Pre-processing of the resume lines
         resume_lines_treated = resumeparse.resume_lines_treatment(resume_lines)
 
         resume_segments = resumeparse.segment(resume_lines_treated)
@@ -486,35 +468,35 @@ class resumeparse(object):
         return resume_segments
 
     '''
-    Fonction pre traitement du CV pour les donnees categorisees
+    Pre processing function of the resume for resume_segments
     '''
     def resume_lines_treatment(resume_lines):
-        resume_lines_treated = []  # pré-traitement sur les lignes du CV
+        resume_lines_treated = []
 
         for lines in resume_lines:
-            lines = lines.replace('◼', '')  # enleve bullet points
-            lines = lines.replace('•', '')  # enleve bullet points
-            lines = lines.replace('·', '')  # enleve bullet points
+            lines = lines.replace('◼', '')  # deleting bullet points
+            lines = lines.replace('•', '')  # deleting bullet points
+            lines = lines.replace('·', '')  # deleting bullet points
             lines = lines.strip()
             resume_lines_treated.append(lines)
 
         return resume_lines_treated
     '''
-    Fonction de pre-traitement de nos donnees issues du CV
+    Another pre processing function
     '''
     def pre_treatment(text):
-        bigString = " ".join(text) #On cree un unique string avec l'entierete des donnees du CV
-        bigString = bigString.lower() #On met tout en minuscule
-        bigString = resumeparse.remove_emphases(bigString) #Enleve les accents
-        bigString = resumeparse.remove_punct(bigString) #Enleve la ponctuation
-        bigString = resumeparse.remove_stopwords(bigString) #Enleve les mots inutiles francais et anglais
-        bigString = resumeparse.remove_duplicate(bigString) #Enleve les doublons
+        bigString = " ".join(text) #Unique string with the whole CV datas
+        bigString = bigString.lower() #LowerCase everything
+        bigString = resumeparse.remove_emphases(bigString) #Deleting emphasis
+        bigString = resumeparse.remove_punct(bigString) #Deleting punctuation
+        bigString = resumeparse.remove_stopwords(bigString) #Deleting useless words in French and English
+        bigString = resumeparse.remove_duplicate(bigString) #Deleting duplicate words
         bigString = " ".join(bigString)
         return bigString
 
 
     '''
-    Fonction de recherche exacte des skills sur l'ensemble du CV dans le fichier des Linkedin skills
+    Straightforward function to look for skills from the whole resume thanks to the linkedin skills
     '''
     def flat_linkedin_recognition(file_path, text):
         with open(file_path, 'r', encoding="utf-8") as file:
@@ -524,32 +506,30 @@ class resumeparse(object):
         result = []
         for word in list_competences:
             wLower = word.strip().lower()
-            if wLower in text.split(): #si une chaine de caractere est présente dans une autre chaine de caractere
-                result.append(word.rstrip('\n')) #ajoute le resultat a la liste et enleve le \n
+            if wLower in text.split(): #if the word is within another the resume text
+                result.append(word.rstrip('\n')) #adding the result and deleting \n
 
         return result
 
     '''
-    Fonction qui enleve les accents d'un string
+    Function deleting emphasis
     '''
     def remove_emphases(text):
         return unidecode.unidecode(text) #enleve accent
 
     '''
-    Fonction pour enlever la ponctuation d'un string
-    On exclut les caracteres choisis dans exclude et on l'applique avec la fonction translate
+    Function deleting punctuation within a string
     '''
     def remove_punct(text):
         exclude = string.punctuation
-        #On a choisi de ne pas exclure le '+' qui est dans string.punctuation de base notamment pour skill C++
-        #donc on remplace le + de notre string exclude par ''
+        #We chose not to exclude '+' and '#' which are originally in string.punctuation for the skills like C++ and C#
         exclude = exclude.replace('+', '')
         exclude = exclude.replace('#', '')
         return text.translate(str.maketrans('', '', exclude))
 
     '''
-    Fonction pour enlever les mots inutiles anglais et francais
-    On constitue la liste de ces mots dans 'stop_words' grace aux fonctions de stopword
+    Function deleting useless French and english words
+    We make this word list in 'stop_words'
     '''
     def remove_stopwords(text):
         #TODO Demander la langue du CV
@@ -561,11 +541,11 @@ class resumeparse(object):
             if word in stop_words:
                 continue
             else:
-                words_without_stop_word.append(word) #Constitue la nouvelle liste de mots sans les stop_words
+                words_without_stop_word.append(word) #New list without stop_words
         return words_without_stop_word
 
     '''
-    Fonction pour enlever les doublons
+    Function deleting duplicates
     '''
     def remove_duplicate(text):
         text = list(dict.fromkeys(text))
@@ -581,7 +561,7 @@ class resumeparse(object):
 
 
     '''
-    Fonction pour récupérer les compétences optimisées pour Fuzzywuzzy
+    Function getting the optimized skills for Fuzzywuzzy
     '''
     def getAllSkills(data: dict):
         organized_skills = []
@@ -607,7 +587,7 @@ class resumeparse(object):
         return resumeparse.remove_duplicate(all_skills)
 
     '''
-    Fonction qui return notre dictionnaire au format json
+    Function returning our dictionary in json format
     '''
     def getJson(data):
         return json.dumps(data, indent=2, ensure_ascii=False)
