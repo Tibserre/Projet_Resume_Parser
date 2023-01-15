@@ -119,9 +119,7 @@ document.querySelectorAll(".drop-zone__input").forEach((inputElement) => {
           .then(result => {
               console.log(result);
               localStorage.setItem("resumes_parsed", JSON.stringify(result));
-              //window.open("/Front/uploadPage/upload.html");
-              window.location.href = "/Front/uploadPage/upload.html";
-              //window.location.replace("/Front/uploadPage/upload.html");
+              window.location.href = "/Front/uploadPage/upload.html";   
           })
           .catch(error => console.log('error', error));
 
