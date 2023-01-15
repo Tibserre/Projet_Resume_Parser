@@ -1,15 +1,13 @@
+# This script allows to retrieve the json of the candidate's resume according to the choice 
+# to use or not the word recognition system via Fuzzywuzzy before being called by the API
 
 from resumeparserFolder.resumeparse import resumeparse
 from RCSS.rcss import rcssSkillRecognition
 
 import json
 
-#data2 = resumeparse.read_file("./CV/CV - AMO.pdf")
 
-
-'''Sans Fuzzywuzzy'''
-
-
+'''Without Fuzzywuzzy'''
 
 def getJsonOfResume(data: dict):
         resume = {
@@ -23,10 +21,7 @@ def getJsonOfResume(data: dict):
         return resume_Json
 
 
-    #print(getJsonOfResume(data))
-
-
-'''Avec Fuzzywuzzy'''
+'''With Fuzzywuzzy'''
 
 def getJsonOfResumeWithFuzzy(data: dict):
         resume = {
@@ -37,39 +32,3 @@ def getJsonOfResumeWithFuzzy(data: dict):
 
         resume_Json = json.dumps(resume, indent=2, ensure_ascii=False)
         return resume_Json
-
-
-    #################################### SANDBOX ####################################
-
-    # def getJsonOfResume():
-
-    #     resume = {
-    #         'contacts': resumeparse.getContact, # get infos/contact in json format
-    #         'skills': , # get skills_JSON
-    #         'formation': formation, # get formation in json format
-    #         'experiences': experiences # get experiences in json format
-    #     }
-
-    #     resume_Json = json.dumps(resume)
-
-    #     return resume_Json
-
-
-    # def getJsonOfResumeWithFuzzy():
-
-    #     resume = {
-    #         'contacts': contacts, # get infos/contact in json format
-    #         'skills': rcssSkillRecognition(skills=skills), # get skills_JSON
-    #         'formation': formation, # get formation in json format
-    #         'experiences': experiences # get experiences in json format
-    #     }
-
-    #     resume_Json = json.dumps(resume)
-
-    #     return resume_Json
-
-
-    #
-    # Fonction qui permet de faire la connection à la base de données NoSql (MongoDB?):
-    # Récupérer le JSON du CV "getJsonOfResume()"" au moment de l'enregistrement dans la collection de CV
-
