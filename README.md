@@ -21,8 +21,8 @@ source venv/bin/activate
 ### Dépendances
 
 ```bash 
-#Ci dessous toutes les dépendances du projet, 
-#certaines sont installées de base avec python
+# Ci dessous toutes les dépendances du projet, 
+# certaines sont installées de base avec python
 - certifi==2022.12.7
 - cffi==1.15.1
 - charset-normalizer==2.1.1
@@ -62,7 +62,8 @@ source venv/bin/activate
 - Werkzeug==2.2.2
 - zipp==3.11.0
 
-### ces dépendances peuvent être necessaires pour faire fonctionner Flask-Cors. à installer au cas où l'étape 4 ne fonctionne pas
+# Ces dépendances peuvent être necessaires pour faire fonctionner Flask-Cors.
+# à installer au cas où l'étape 4 ne fonctionne pas
 
 - cmake==3.25.0 
 - Flask-Cors==3.0.10
