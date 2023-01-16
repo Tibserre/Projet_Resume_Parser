@@ -21,7 +21,8 @@ source venv/bin/activate
 ### Dépendances
 
 ```bash 
-#Ci dessous toutes les dépendances du projet, certaines sont installées de base avec python
+#Ci dessous toutes les dépendances du projet, 
+#certaines sont installées de base avec python
 - certifi==2022.12.7
 - cffi==1.15.1
 - charset-normalizer==2.1.1
