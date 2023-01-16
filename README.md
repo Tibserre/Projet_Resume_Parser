@@ -1,8 +1,9 @@
 # Resume Parser EPF
 
-Ce projet permet de lire des CV, essentiellement des CV écrits en lignes (voir image ci dessous)
+Ce projet permet de lire des CV, essentiellement des CV écrits en lignes (voir image ci dessous)<br/><br/>
 
-![Exemple de CV qui sera bien lu](https://binaries.templates.cdn.office.net/support/templates/en-us/lt02918880_quantized.png)
+<img src="https://binaries.templates.cdn.office.net/support/templates/en-us/lt02918880_quantized.png" width="300" >
+<br/><br/><br/><br/>
 
 # Setup
 ## Étape 1
