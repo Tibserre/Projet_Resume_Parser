@@ -1,4 +1,8 @@
-# Projet_Resume_Parser
+# Resume Parser EPF
+
+Ce projet permet de lire des CV, essentiellement des CV écrits en lignes (voir image ci dessous)
+
+![Exemple de CV qui sera bien lu](https://www.google.com/url?sa=i&url=https%3A%2F%2Ftemplates.office.com%2Fen-us%2Fresume-color-tm02918880&psig=AOvVaw0kFDTva_X_cTX8jtaRP_o0&ust=1673971783198000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCPiy4v28zPwCFQAAAAAdAAAAABAO)
 
 # Setup
 ## Étape 1
@@ -63,6 +67,10 @@ Mais attention, subtilité qui fonctionne sur MacOS facilement (surement aussi s
 
 Les requêtes risquent d'être bloquées par Chrome, à cause de CORS Policy. Pour éviter cela, dans votre terminal mettez la commande suivante 
 
-`open -n -a /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --args --user-data-dir="/tmp/chrome_dev_test" --disable-web-security`
+```bash 
+# À lancer dans votre terminal
+open -n -a /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --args --user-data-dir="/tmp/chrome_dev_test" --disable-web-security
+```
+
 
 Vous aurez une fenêtre Chrome sans Core Policy 
