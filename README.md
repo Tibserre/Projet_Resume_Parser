@@ -7,11 +7,21 @@ Ce projet permet de lire des CV, essentiellement des CV écrits en lignes (voir 
 
 # Setup
 ## Étape 1
-Mettez en place un virtual environnement. Le projet étant toujours en développement, c'est mieux
 
+Mettez en place un virtual environnement.
+```bash 
+# Création du virtualenv
+venv venv
+
+# Ouverture du virtual env
+source venv/bin/activate
+```
+<br/><br/>
 ## Étape 2
 ### Dépendances
-une partie sont installées nativement avec Python normalement
+
+```bash 
+#Ci dessous toutes les dépendances du projet, certaines sont installées de base avec python
 - certifi==2022.12.7
 - cffi==1.15.1
 - charset-normalizer==2.1.1
@@ -51,17 +61,21 @@ une partie sont installées nativement avec Python normalement
 - Werkzeug==2.2.2
 - zipp==3.11.0
 
-### ces dépendances peuvent être necessaires pour faire fonctionner Flask-Cors. Sont inutiles sur MacOS, inutiles sur Ubuntu 20, à testser sur Windows 
+### ces dépendances peuvent être necessaires pour faire fonctionner Flask-Cors. à installer au cas où l'étape 4 ne fonctionne pas
+
 - cmake==3.25.0 
 - Flask-Cors==3.0.10
 - psycopg2-binary==2.9.5
+```
 
-Une dépendaces utilise JAVA pour fonctionner, Tikka, si vous avez une erreur lors de l'éxecution liée à Tikka, c'est sans aucun doute qu'il vous manque java, --> rendez vous sur leur site et téléchargez le 
-
+`Tikka` utilise `JAVA`, il peut être donc nécessaire d'installer JAVA sur votre machine. 
+<br/><br/>
 ## Étape 3 
-Lancez le projet en vous mettant sur le fichier `resumeParserApi.py` et cliquez sur lancer
-s'il vous manque des bibliothèques, un message d'erreur vous le dira, donc retour à l'étape précédente
+Lancez le projet en vous mettant sur le fichier `resumeParserApi.py` et cliquez sur le bouton comme ci dessous
 
+<img src="https://i.stack.imgur.com/Y5OKl.png" width="200" >
+
+<br/><br/>
 ## Étape 4
 Lancez le front. Pour cela, le plus simple et d'utiliser LiveServer sur Visual Studio Code. 
 Mais attention, subtilité qui fonctionne sur MacOS facilement (surement aussi sur Windows)
@@ -72,6 +86,5 @@ Les requêtes risquent d'être bloquées par Chrome, à cause de CORS Policy. Po
 # À lancer dans votre terminal
 open -n -a /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --args --user-data-dir="/tmp/chrome_dev_test" --disable-web-security
 ```
-
 
 Vous aurez une fenêtre Chrome sans Core Policy 
