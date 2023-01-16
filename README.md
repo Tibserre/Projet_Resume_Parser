@@ -2,7 +2,7 @@
 
 Ce projet permet de lire des CV, essentiellement des CV écrits en lignes (voir image ci dessous)
 
-![Exemple de CV qui sera bien lu](https://www.google.com/url?sa=i&url=https%3A%2F%2Ftemplates.office.com%2Fen-us%2Fresume-color-tm02918880&psig=AOvVaw0kFDTva_X_cTX8jtaRP_o0&ust=1673971783198000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCPiy4v28zPwCFQAAAAAdAAAAABAO)
+![Exemple de CV qui sera bien lu](https://binaries.templates.cdn.office.net/support/templates/en-us/lt02918880_quantized.png)
 
 # Setup
 ## Étape 1
