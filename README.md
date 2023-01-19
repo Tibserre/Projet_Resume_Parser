@@ -90,3 +90,8 @@ open -n -a /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --args
 ```
 
 Vous aurez une fenêtre Chrome sans Core Policy 
+
+### Auteurs du projet resume-parser base des script du dossier "resumperserFolder" 
+
+[resume-parser](https://pypi.org/project/resume-parser/)
+by Kumar Rajwani and Brian Njoroge
